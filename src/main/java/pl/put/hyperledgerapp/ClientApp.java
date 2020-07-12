@@ -4,10 +4,14 @@ SPDX-License-Identifier: Apache-2.0
 
 package pl.put.hyperledgerapp;
 
-import org.hyperledger.fabric.gateway.*;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.hyperledger.fabric.gateway.Contract;
+import org.hyperledger.fabric.gateway.Gateway;
+import org.hyperledger.fabric.gateway.Network;
+import org.hyperledger.fabric.gateway.Wallet;
+import org.hyperledger.fabric.gateway.Wallets;
 
 public class ClientApp {
 
