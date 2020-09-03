@@ -5,41 +5,45 @@ function one_line_pem {
 }
 
 function json_ccp {
-    local PP=$(one_line_pem $4)
-    local CP=$(one_line_pem $5)
-    sed -e "s/\${ORG}/$1/" \
-        -e "s/\${P0PORT}/$2/" \
-        -e "s/\${CAPORT}/$3/" \
+    local PP=$(one_line_pem $5)
+    local CP=$(one_line_pem $6)
+    sed -e "s/\${ORGName}/$1/" \
+        -e "s/\${ORGPath}/$2/" \
+        -e "s/\${P0PORT}/$3/" \
+        -e "s/\${CAPORT}/$4/" \
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
         organizations/ccp-template.json
 }
 
 function yaml_ccp {
-    local PP=$(one_line_pem $4)
-    local CP=$(one_line_pem $5)
-    sed -e "s/\${ORG}/$1/" \
-        -e "s/\${P0PORT}/$2/" \
-        -e "s/\${CAPORT}/$3/" \
+    local PP=$(one_line_pem $5)
+    local CP=$(one_line_pem $6)
+    sed -e "s/\${ORGName}/$1/" \
+        -e "s/\${ORGPath}/$2/" \
+        -e "s/\${P0PORT}/$3/" \
+        -e "s/\${CAPORT}/$4/" \
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
         organizations/ccp-template.yaml | sed -e $'s/\\\\n/\\\n          /g'
 }
 
-ORG=1
+ORGName=SupervisorsOrg
+ORGPath=supervisorsorg
 P0PORT=7051
 CAPORT=7054
-PEERPEM=organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/supervisorsorg.put.poznan.pl/tlsca/tlsca.supervisorsorg.put.poznan.pl-cert.pem
+CAPEM=organizations/peerOrganizations/supervisorsorg.put.poznan.pl/ca/ca.supervisorsorg.put.poznan.pl-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org1.example.com/connection-org1.json
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org1.example.com/connection-org1.yaml
+echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisorsorg.put.poznan.pl/connection-supervisorsorg.json
+echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisorsorg.put.poznan.pl/connection-supervisorsorg.yaml
 
-ORG=2
+ORGName=StudentOrg
+ORGPath=studentsorg
 P0PORT=9051
 CAPORT=8054
-PEERPEM=organizations/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/studentsorg.put.poznan.pl/tlsca/tlsca.studentsorg.put.poznan.pl-cert.pem
+CAPEM=organizations/peerOrganizations/studentsorg.put.poznan.pl/ca/ca.studentsorg.put.poznan.pl-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org2.example.com/connection-org2.json
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org2.example.com/connection-org2.yaml
+echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/studentsorg.put.poznan.pl/connection-studentsorg.json
+echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/studentsorg.put.poznan.pl/connection-studentsorg.yaml
