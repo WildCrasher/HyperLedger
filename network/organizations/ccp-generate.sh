@@ -29,21 +29,21 @@ function yaml_ccp {
 }
 
 ORGName=SupervisorsOrg
-ORGPath=supervisorsorg
+ORGPath=supervisors
 P0PORT=7051
 CAPORT=7054
-PEERPEM=organizations/peerOrganizations/supervisorsorg.put.poznan.pl/tlsca/tlsca.supervisorsorg.put.poznan.pl-cert.pem
-CAPEM=organizations/peerOrganizations/supervisorsorg.put.poznan.pl/ca/ca.supervisorsorg.put.poznan.pl-cert.pem
+PEERPEM=organizations/peerOrganizations/supervisors.put.poznan.pl/tlsca/tlsca.supervisors.put.poznan.pl-cert.pem
+CAPEM=organizations/peerOrganizations/supervisors.put.poznan.pl/ca/ca.supervisors.put.poznan.pl-cert.pem
 
-echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisorsorg.put.poznan.pl/connection-supervisorsorg.json
-echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisorsorg.put.poznan.pl/connection-supervisorsorg.yaml
+echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisors.put.poznan.pl/connection-supervisors.json
+echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisors.put.poznan.pl/connection-supervisors.yaml
 
 ORGName=StudentOrg
-ORGPath=studentsorg
+ORGPath=students
 P0PORT=9051
 CAPORT=8054
-PEERPEM=organizations/peerOrganizations/studentsorg.put.poznan.pl/tlsca/tlsca.studentsorg.put.poznan.pl-cert.pem
-CAPEM=organizations/peerOrganizations/studentsorg.put.poznan.pl/ca/ca.studentsorg.put.poznan.pl-cert.pem
+PEERPEM=organizations/peerOrganizations/students.put.poznan.pl/tlsca/tlsca.students.put.poznan.pl-cert.pem
+CAPEM=organizations/peerOrganizations/students.put.poznan.pl/ca/ca.students.put.poznan.pl-cert.pem
 
-echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/studentsorg.put.poznan.pl/connection-studentsorg.json
-echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/studentsorg.put.poznan.pl/connection-studentsorg.yaml
+echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/students.put.poznan.pl/connection-students.json
+echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/students.put.poznan.pl/connection-students.yaml

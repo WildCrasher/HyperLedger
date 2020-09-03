@@ -12,7 +12,7 @@ PeerOrgs:
   # Org1
   # ---------------------------------------------------------------------------
   - Name: SupervisorsOrg
-    Domain: supervisorsorg.put.poznan.pl
+    Domain: supervisors.put.poznan.pl
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"

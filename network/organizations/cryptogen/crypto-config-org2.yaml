@@ -11,7 +11,7 @@ PeerOrgs:
   # Org2
   # ---------------------------------------------------------------------------
   - Name: StudentsOrg
-    Domain: studentsorg.put.poznan.pl
+    Domain: students.put.poznan.pl
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
