@@ -432,7 +432,7 @@ CLI_DELAY=3
 # channel name defaults to "mychannel"
 CHANNEL_NAME="mychannel"
 # use this as the default docker-compose yaml definition
-COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
+COMPOSE_FILE_BASE=docker/docker-compose-thesis-net.yaml
 # docker-compose.yaml file if you are using couchdb
 COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 # certificate authorities compose file
