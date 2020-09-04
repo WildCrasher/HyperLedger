@@ -33,7 +33,7 @@ createChannelTx() {
 
 createAncorPeerTx() {
 
-	for orgmsp in Org1MSP Org2MSP; do
+	for orgmsp in SupervisorsMSP StudentsMSP; do
 
 	echo "#######    Generating anchor peer update transaction for ${orgmsp}  ##########"
 	set -x
@@ -56,7 +56,7 @@ createChannel() {
 	while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
 		sleep $DELAY
 		set -x
-		peer channel create -o localhost:7050 -c $CHANNEL_NAME --ordererTLSHostnameOverride orderer.example.com -f ./channel-artifacts/${CHANNEL_NAME}.tx --outputBlock ./channel-artifacts/${CHANNEL_NAME}.block --tls --cafile $ORDERER_CA >&log.txt
+		peer channel create -o localhost:7050 -c $CHANNEL_NAME --ordererTLSHostnameOverride orderer.put.poznan.pl -f ./channel-artifacts/${CHANNEL_NAME}.tx --outputBlock ./channel-artifacts/${CHANNEL_NAME}.block --tls --cafile $ORDERER_CA >&log.txt
 		res=$?
 		set +x
 		let rc=$res
@@ -87,7 +87,7 @@ joinChannel() {
 	done
 	cat log.txt
 	echo
-	verifyResult $res "After $MAX_RETRY attempts, peer0.org${ORG} has failed to join channel '$CHANNEL_NAME' "
+	verifyResult $res "After $MAX_RETRY attempts, peer0.${ORG} has failed to join channel '$CHANNEL_NAME' "
 }
 
 updateAnchorPeers() {
@@ -99,7 +99,7 @@ updateAnchorPeers() {
 	while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
     sleep $DELAY
     set -x
-		peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
+		peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
     res=$?
     set +x
 		let rc=$res
@@ -137,15 +137,15 @@ echo "Creating channel "$CHANNEL_NAME
 createChannel
 
 ## Join all the peers to the channel
-echo "Join Org1 peers to the channel..."
+echo "Join Supervisors peers to the channel..."
 joinChannel 1
-echo "Join Org2 peers to the channel..."
+echo "Join Students peers to the channel..."
 joinChannel 2
 
 ## Set the anchor peers for each org in the channel
-echo "Updating anchor peers for org1..."
+echo "Updating anchor peers for supervisors..."
 updateAnchorPeers 1
-echo "Updating anchor peers for org2..."
+echo "Updating anchor peers for students..."
 updateAnchorPeers 2
 
 echo
