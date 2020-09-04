@@ -25,7 +25,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: ../organizations/ordererOrganizations/orderer.put.poznan.pl/msp
+        MSPDir: ../organizations/ordererOrganizations/put.poznan.pl/orderers/orderer.put.poznan.pl/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
