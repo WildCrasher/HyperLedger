@@ -21,6 +21,8 @@ setOrdererGlobals() {
 
 # Set environment variables for the peer org
 setGlobals() {
+  echo "@@@@@"
+  echo $1
   local USING_ORG=""
   if [ -z "$OVERRIDE_ORG" ]; then
     USING_ORG=$1
@@ -28,12 +30,12 @@ setGlobals() {
     USING_ORG="${OVERRIDE_ORG}"
   fi
   echo "Using organization ${USING_ORG}"
-  if [ $USING_ORG -eq 1 ]; then
+  if [ $USING_ORG == "supervisors" ]; then
     export CORE_PEER_LOCALMSPID="SupervisorsMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG1_CA
     export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/supervisors.put.poznan.pl/users/Admin@supervisors.put.poznan.pl/msp
     export CORE_PEER_ADDRESS=localhost:7051
-  elif [ $USING_ORG -eq 2 ]; then
+  elif [ $USING_ORG == "students" ]; then
     export CORE_PEER_LOCALMSPID="StudentsMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG2_CA
     export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/students.put.poznan.pl/users/Admin@students.put.poznan.pl/msp

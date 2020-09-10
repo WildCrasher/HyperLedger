@@ -37,7 +37,7 @@ createAncorPeerTx() {
 
 	echo "#######    Generating anchor peer update transaction for ${orgmsp}  ##########"
 	set -x
-	configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/${orgmsp}anchors.tx -channelID $CHANNEL_NAME -asOrg ${orgmsp}
+	configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/${orgmsp}MSPanchors.tx -channelID $CHANNEL_NAME -asOrg ${orgmsp}
 	res=$?
 	set +x
 	if [ $res -ne 0 ]; then
@@ -92,6 +92,9 @@ joinChannel() {
 
 updateAnchorPeers() {
   ORG=$1
+  echo $1
+  echo "@@@"
+  echo ${CORE_PEER_LOCALMSPID}
   setGlobals $ORG
 	local rc=1
 	local COUNTER=1
@@ -138,15 +141,15 @@ createChannel
 
 ## Join all the peers to the channel
 echo "Join Supervisors peers to the channel..."
-joinChannel 1
+joinChannel "supervisors"
 echo "Join Students peers to the channel..."
-joinChannel 2
+joinChannel "students"
 
 ## Set the anchor peers for each org in the channel
 echo "Updating anchor peers for supervisors..."
-updateAnchorPeers 1
+updateAnchorPeers "supervisors"
 echo "Updating anchor peers for students..."
-updateAnchorPeers 2
+updateAnchorPeers "students"
 
 echo
 echo "========= Channel successfully joined =========== "

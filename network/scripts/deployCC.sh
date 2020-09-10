@@ -250,47 +250,47 @@ chaincodeQuery() {
 }
 
 ## at first we package the chaincode
-packageChaincode 1
+packageChaincode "supervisors"
 
 ## Install chaincode on peer0.supervisors and peer0.students
 echo "Installing chaincode on peer0.supervisors..."
-installChaincode 1
+installChaincode "supervisors"
 echo "Install chaincode on peer0.students..."
-installChaincode 2
+installChaincode "students"
 
 ## query whether the chaincode is installed
-queryInstalled 1
+queryInstalled "supervisors"
 
 ## approve the definition for supervisors
-approveForMyOrg 1
+approveForMyOrg "supervisors"
 
 ## check whether the chaincode definition is ready to be committed
 ## expect supervisors to have approved and students not to
-checkCommitReadiness 1 "\"SupervisorsMSP\": true" "\"StudentsMSP\": false"
-checkCommitReadiness 2 "\"SupervisorsMSP\": true" "\"StudentsMSP\": false"
+checkCommitReadiness "supervisors" "\"SupervisorsMSP\": true" "\"StudentsMSP\": false"
+checkCommitReadiness "students" "\"SupervisorsMSP\": true" "\"StudentsMSP\": false"
 
 ## now approve also for students
-approveForMyOrg 2
+approveForMyOrg "students"
 
 ## check whether the chaincode definition is ready to be committed
 ## expect them both to have approved
-checkCommitReadiness 1 "\"SupervisorsMSP\": true" "\"StudentsMSP\": true"
-checkCommitReadiness 2 "\"SupervisorsMSP\": true" "\"StudentsMSP\": true"
+checkCommitReadiness "supervisors" "\"SupervisorsMSP\": true" "\"StudentsMSP\": true"
+checkCommitReadiness "students" "\"SupervisorsMSP\": true" "\"StudentsMSP\": true"
 
 ## now that we know for sure both orgs have approved, commit the definition
-commitChaincodeDefinition 1 2
+commitChaincodeDefinition "supervisors" "students"
 
 ## query on both orgs to see that the definition committed successfully
-queryCommitted 1
-queryCommitted 2
+queryCommitted "supervisors"
+queryCommitted "students"
 
 ## Invoke the chaincode
-chaincodeInvokeInit 1 2
+chaincodeInvokeInit "supervisors" "students"
 
 sleep 10
 
 # Query chaincode on peer0.supervisors
 echo "Querying chaincode on peer0.supervisors..."
-chaincodeQuery 1
+chaincodeQuery "supervisors"
 
 exit 0
