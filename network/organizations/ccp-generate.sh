@@ -28,7 +28,7 @@ function yaml_ccp {
         organizations/ccp-template.yaml | sed -e $'s/\\\\n/\\\n          /g'
 }
 
-ORGName=SupervisorsOrg
+ORGName=Supervisors
 ORGPath=supervisors
 P0PORT=7051
 CAPORT=7054
@@ -38,7 +38,7 @@ CAPEM=organizations/peerOrganizations/supervisors.put.poznan.pl/ca/ca.supervisor
 echo "$(json_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisors.put.poznan.pl/connection-supervisors.json
 echo "$(yaml_ccp $ORGName $ORGPath $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/supervisors.put.poznan.pl/connection-supervisors.yaml
 
-ORGName=StudentOrg
+ORGName=Students
 ORGPath=students
 P0PORT=9051
 CAPORT=8054

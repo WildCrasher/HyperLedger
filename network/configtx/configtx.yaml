@@ -16,7 +16,7 @@ Organizations:
 
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
-    - &OrdererOrg
+    - &Orderer
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
         Name: OrdererOrg
@@ -44,10 +44,10 @@ Organizations:
         OrdererEndpoints:
             - orderer.put.poznan.pl:7050
 
-    - &SupervisorsOrg
+    - &Supervisors
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: SupervisorsOrg
+        Name: Supervisors
 
         # ID to load the MSP definition as
         ID: SupervisorsMSP
@@ -79,10 +79,10 @@ Organizations:
             - Host: peer0.supervisors.put.poznan.pl
               Port: 7051
 
-    - &StudentsOrg
+    - &Students
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: StudentsOrg
+        Name: Students
 
         # ID to load the MSP definition as
         ID: StudentsMSP
@@ -313,21 +313,21 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *OrdererOrg
+                - *Orderer
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *SupervisorsOrg
-                    - *StudentsOrg
+                    - *Supervisors
+                    - *Students
     TwoOrgsChannel:
         Consortium: SampleConsortium
         <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *SupervisorsOrg
-                - *StudentsOrg
+                - *Supervisors
+                - *Students
             Capabilities:
                 <<: *ApplicationCapabilities
