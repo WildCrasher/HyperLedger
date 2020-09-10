@@ -49,7 +49,7 @@ createAncorPeerTx() {
 }
 
 createChannel() {
-	setGlobals 1
+	setGlobals "supervisors"
 	# Poll in case the raft leader is not set yet
 	local rc=1
 	local COUNTER=1
