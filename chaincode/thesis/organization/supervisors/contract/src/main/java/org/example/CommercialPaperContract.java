@@ -67,20 +67,20 @@ public class CommercialPaperContract implements ContractInterface {
      * @param {Integer} faceValue face value of paper
      */
     @Transaction
-    public CommercialPaper issue(CommercialPaperContext ctx, String issuer, String paperNumber, String issueDateTime,
-            String maturityDateTime, int faceValue) {
+    public Thesis issue(CommercialPaperContext ctx, String issuer, String paperNumber, String issueDateTime,
+                        String maturityDateTime, int faceValue) {
 
         System.out.println(ctx);
 
         // create an instance of the paper
-        CommercialPaper paper = CommercialPaper.createInstance(issuer, paperNumber, issueDateTime, maturityDateTime,
+        Thesis paper = Thesis.createInstance(issuer, paperNumber, issueDateTime, maturityDateTime,
                 faceValue,issuer,"");
 
         // Smart contract, rather than paper, moves paper into ISSUED state
         paper.setIssued();
 
         // Newly issued paper is owned by the issuer
-        paper.setOwner(issuer);
+        paper.setStudent(issuer);
 
         System.out.println(paper);
         // Add the paper to the list of all similar commercial papers in the ledger
@@ -103,15 +103,15 @@ public class CommercialPaperContract implements ContractInterface {
      * @param {String} purchaseDateTime time paper was purchased (i.e. traded)
      */
     @Transaction
-    public CommercialPaper buy(CommercialPaperContext ctx, String issuer, String paperNumber, String currentOwner,
-            String newOwner, int price, String purchaseDateTime) {
+    public Thesis buy(CommercialPaperContext ctx, String issuer, String paperNumber, String currentOwner,
+                      String newOwner, int price, String purchaseDateTime) {
 
         // Retrieve the current paper using key fields provided
         String paperKey = State.makeKey(new String[] { paperNumber });
-        CommercialPaper paper = ctx.paperList.getPaper(paperKey);
+        Thesis paper = ctx.paperList.getPaper(paperKey);
 
         // Validate current owner
-        if (!paper.getOwner().equals(currentOwner)) {
+        if (!paper.getStudent().equals(currentOwner)) {
             throw new RuntimeException("Paper " + issuer + paperNumber + " is not owned by " + currentOwner);
         }
 
@@ -122,7 +122,7 @@ public class CommercialPaperContract implements ContractInterface {
 
         // Check paper is not already REDEEMED
         if (paper.isTrading()) {
-            paper.setOwner(newOwner);
+            paper.setStudent(newOwner);
         } else {
             throw new RuntimeException(
                     "Paper " + issuer + paperNumber + " is not trading. Current state = " + paper.getState());
@@ -143,12 +143,12 @@ public class CommercialPaperContract implements ContractInterface {
      * @param {String} redeemDateTime time paper was redeemed
      */
     @Transaction
-    public CommercialPaper redeem(CommercialPaperContext ctx, String issuer, String paperNumber, String redeemingOwner,
-            String redeemDateTime) {
+    public Thesis redeem(CommercialPaperContext ctx, String issuer, String paperNumber, String redeemingOwner,
+                         String redeemDateTime) {
 
-        String paperKey = CommercialPaper.makeKey(new String[] { paperNumber });
+        String paperKey = Thesis.makeKey(new String[] { paperNumber });
 
-        CommercialPaper paper = ctx.paperList.getPaper(paperKey);
+        Thesis paper = ctx.paperList.getPaper(paperKey);
 
         // Check paper is not REDEEMED
         if (paper.isRedeemed()) {
@@ -156,8 +156,8 @@ public class CommercialPaperContract implements ContractInterface {
         }
 
         // Verify that the redeemer owns the commercial paper before redeeming it
-        if (paper.getOwner().equals(redeemingOwner)) {
-            paper.setOwner(paper.getIssuer());
+        if (paper.getStudent().equals(redeemingOwner)) {
+            paper.setStudent(paper.getIssuer());
             paper.setRedeemed();
         } else {
             throw new RuntimeException("Redeeming owner does not own paper" + issuer + paperNumber);

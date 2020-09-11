@@ -12,19 +12,19 @@ public class PaperList {
     private StateList stateList;
 
     public PaperList(Context ctx) {
-        this.stateList = StateList.getStateList(ctx, PaperList.class.getSimpleName(), CommercialPaper::deserialize);
+        this.stateList = StateList.getStateList(ctx, PaperList.class.getSimpleName(), Thesis::deserialize);
     }
 
-    public PaperList addPaper(CommercialPaper paper) {
+    public PaperList addPaper(Thesis paper) {
         stateList.addState(paper);
         return this;
     }
 
-    public CommercialPaper getPaper(String paperKey) {
-        return (CommercialPaper) this.stateList.getState(paperKey);
+    public Thesis getPaper(String paperKey) {
+        return (Thesis) this.stateList.getState(paperKey);
     }
 
-    public PaperList updatePaper(CommercialPaper paper) {
+    public PaperList updatePaper(Thesis paper) {
         this.stateList.updateState(paper);
         return this;
     }
