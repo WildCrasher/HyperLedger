@@ -17,14 +17,14 @@ function _exit(){
 # Where am I?
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Locate the test-network 
-cd "${DIR}/../../../test-network"
+# Locate the network 
+cd "${DIR}/../../../network"
 env | sort > /tmp/env.orig
 
 OVERRIDE_ORG="2"
 . ./scripts/envVar.sh
 
-
+#mozliwe ze tutaj zamiast 1 i 2 musimy byc super...
 parsePeerConnectionParameters 1 2
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 

@@ -31,10 +31,11 @@ elif [ "$CC_SRC_LANGUAGE" = "javascript" ]; then
 
 elif [ "$CC_SRC_LANGUAGE" = "java" ]; then
 	CC_RUNTIME_LANGUAGE=java
-	CC_SRC_PATH="../chaincode/fabcar/java/build/install/fabcar"
-
+	# CC_SRC_PATH="../chaincode/fabcar/java/build/install/fabcar"
+  CC_SRC_PATH="../chaincode/thesis/organization/supervisors/contract/build/install/thesis"
 	echo Compiling Java code ...
-	pushd ../chaincode/fabcar/java
+  # pushd ../chaincode/fabcar/java
+	pushd ../chaincode/thesis/organization/supervisors/contract
 	./gradlew installDist
 	popd
 	echo Finished compiling Java code
@@ -64,6 +65,7 @@ packageChaincode() {
   ORG=$1
   setGlobals $ORG
   set -x
+  # jeszcze nie ogarnalem tego
   peer lifecycle chaincode package fabcar.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label fabcar_${VERSION} >&log.txt
   res=$?
   set +x
@@ -78,6 +80,7 @@ installChaincode() {
   ORG=$1
   setGlobals $ORG
   set -x
+  # jeszcze nie ogarnalem tego
   peer lifecycle chaincode install fabcar.tar.gz >&log.txt
   res=$?
   set +x
@@ -96,6 +99,7 @@ queryInstalled() {
   res=$?
   set +x
   cat log.txt
+  # jeszcze nie ogarnalem tego
 	PACKAGE_ID=$(sed -n "/fabcar_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
   verifyResult $res "Query installed on peer0.${ORG} has failed"
   echo "===================== Query installed successful on peer0.${ORG} on channel ===================== "
@@ -129,7 +133,7 @@ checkCommitReadiness() {
     sleep $DELAY
     echo "Attempting to check the commit readiness of the chaincode definition on peer0.${ORG}, Retry after $DELAY seconds."
     set -x
-    peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name fabcar --version ${VERSION} --sequence ${VERSION} --output json --init-required >&log.txt
+    peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --sequence ${VERSION} --output json --init-required >&log.txt
     res=$?
     set +x
     let rc=0
@@ -159,7 +163,7 @@ commitChaincodeDefinition() {
   # peer (if join was successful), let's supply it directly as we know
   # it using the "-o" option
   set -x
-  peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name fabcar $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+  peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -182,7 +186,7 @@ queryCommitted() {
     sleep $DELAY
     echo "Attempting to Query committed status on peer0.${ORG}, Retry after $DELAY seconds."
     set -x
-    peer lifecycle chaincode querycommitted --channelID $CHANNEL_NAME --name fabcar >&log.txt
+    peer lifecycle chaincode querycommitted --channelID $CHANNEL_NAME --name thesis >&log.txt
     res=$?
     set +x
 		test $res -eq 0 && VALUE=$(cat log.txt | grep -o '^Version: [0-9], Sequence: [0-9], Endorsement Plugin: escc, Validation Plugin: vscc')
@@ -210,7 +214,7 @@ chaincodeInvokeInit() {
   # peer (if join was successful), let's supply it directly as we know
   # it using the "-o" option
   set -x
-  peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"initLedger","Args":[]}' >&log.txt
+  peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n thesis $PEER_CONN_PARMS --isInit -c '{"function":"initLedger","Args":[]}' >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -231,7 +235,7 @@ chaincodeQuery() {
     sleep $DELAY
     echo "Attempting to Query peer0.${ORG}, Retry after $DELAY seconds."
     set -x
-    peer chaincode query -C $CHANNEL_NAME -n fabcar -c '{"Args":["queryAllCars"]}' >&log.txt
+    peer chaincode query -C $CHANNEL_NAME -n thesis -c '{"Args":["queryAllCars"]}' >&log.txt
     res=$?
     set +x
 		let rc=$res

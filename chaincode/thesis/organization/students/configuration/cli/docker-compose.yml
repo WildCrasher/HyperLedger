@@ -8,11 +8,11 @@ version: '2'
 networks:
   basic:
     external:
-      name: net_test
+      name: network
 
 services:
-  cliDigiBank:
-    container_name: cliDigiBank
+  cliStudents:
+    container_name: cliStudents
     image: hyperledger/fabric-tools:2.0.0-beta
     tty: true
     environment:
@@ -20,19 +20,19 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=info
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+      - CORE_PEER_ADDRESS=peer0.students.put.poznan.pl:7051
+      - CORE_PEER_LOCALMSPID=StudentsMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/students.put.poznan.pl/users/Admin@students.put.poznan.pl/msp
       - CORE_CHAINCODE_KEEPALIVE=10
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/students.put.poznan.pl/peers/peer0.students.put.poznan.pl/tls/ca.crt
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/put.poznan.pl/orderers/orderer.put.poznan.pl/msp/tlscacerts/tlsca.put.poznan.pl-cert.pem
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ./../../../../organization/digibank:/opt/gopath/src/github.com/
-        - ./../../../../../test-network/organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./../../../../organization/students:/opt/gopath/src/github.com/
+        - ./../../../../../network/organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
         - basic
 

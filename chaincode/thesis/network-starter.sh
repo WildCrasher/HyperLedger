@@ -16,21 +16,22 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export FABRIC_CFG_PATH="${DIR}/../config"
 
-cd "${DIR}/../test-network/"
-
-docker kill cliDigiBank cliMagnetoCorp logspout || true
+cd "${DIR}/../network/"
+#tutaj tez te nazwy jeszcze nie sa mi znane
+docker kill cliStudents cliSupervisors logspout || true
 ./network.sh down
 ./network.sh up createChannel -ca -s couchdb
 
 # Copy the connection profiles so they are in the correct organizations.
-cp "${DIR}/../test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml" "${DIR}/organization/digibank/gateway/"
-cp "${DIR}/../test-network/organizations/peerOrganizations/org2.example.com/connection-org2.yaml" "${DIR}/organization/magnetocorp/gateway/"
+cp "${DIR}/../network/organizations/peerOrganizations/supervisors.put.poznan.pl/connection-supervisors.yaml" "${DIR}/organization/supervisors/gateway/"
+cp "${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/connection-students.yaml" "${DIR}/organization/students/gateway/"
 
-cp ${DIR}/../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/* ${DIR}/../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
-cp ${DIR}/../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/* ${DIR}/../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
+cp ${DIR}/../network/organizations/peerOrganizations/supervisors.put.poznan.pl/users/User1@supervisors.put.poznan.pl/msp/signcerts/* ${DIR}/../network/organizations/peerOrganizations/supervisors.put.poznan.pl/users/User1@supervisors.put.poznan.pl/msp/signcerts/User1@supervisors.put.poznan.pl-cert.pem
+cp ${DIR}/../network/organizations/peerOrganizations/supervisors.put.poznan.pl/users/User1@supervisors.put.poznan.pl/msp/keystore/* ${DIR}/../network/organizations/peerOrganizations/supervisors.put.poznan.pl/users/User1@supervisors.put.poznan.pl/msp/keystore/priv_sk
 
-cp ${DIR}/../test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/signcerts/* ${DIR}/../test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/signcerts/User1@org2.example.com-cert.pem
-cp ${DIR}/../test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/keystore/* ${DIR}/../test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/keystore/priv_sk
+cp ${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/users/User1@students.put.poznan.pl/msp/signcerts/* ${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/users/User1@students.put.poznan.pl/msp/signcerts/User1@students.put.poznan.pl-cert.pem
+cp ${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/users/User1@students.put.poznan.pl/msp/keystore/* ${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/users/User1@students.put.poznan.pl/msp/keystore/priv_sk
 
 echo Suggest that you monitor the docker containers by running
-echo "./organization/magnetocorp/configuration/cli/monitordocker.sh net_test"
+
+echo "./organization/supervisors/configuration/cli/monitordocker.sh network"
