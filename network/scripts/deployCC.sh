@@ -66,7 +66,7 @@ packageChaincode() {
   setGlobals $ORG
   set -x
   # jeszcze nie ogarnalem tego TODO
-  peer lifecycle chaincode package fabcar.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label thesis_${VERSION} >&log.txt
+  peer lifecycle chaincode package thesis.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label thesis_${VERSION} >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -81,7 +81,7 @@ installChaincode() {
   setGlobals $ORG
   set -x
   # jeszcze nie ogarnalem tego TODO
-  peer lifecycle chaincode install fabcar.tar.gz >&log.txt
+  peer lifecycle chaincode install thesis.tar.gz >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -100,7 +100,7 @@ queryInstalled() {
   set +x
   cat log.txt
   # jeszcze nie ogarnalem tego TODO
-	PACKAGE_ID=$(sed -n "/fabcar_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
+	PACKAGE_ID=$(sed -n "/thesis_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
   verifyResult $res "Query installed on peer0.${ORG} has failed"
   echo "===================== Query installed successful on peer0.${ORG} on channel ===================== "
   echo
@@ -111,7 +111,7 @@ approveForMyOrg() {
   ORG=$1
   setGlobals $ORG
   set -x
-  peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name fabcar --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
+  peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
   set +x
   cat log.txt
   verifyResult $res "Chaincode definition approved on peer0.${ORG} on channel '$CHANNEL_NAME' failed"
@@ -289,12 +289,13 @@ queryCommitted "supervisors"
 queryCommitted "students"
 
 ## Invoke the chaincode
-chaincodeInvokeInit "supervisors" "students"
+# chaincodeInvokeInit "supervisors" "students"
 
-sleep 10
+# sleep 10
 
 # Query chaincode on peer0.supervisors
-echo "Querying chaincode on peer0.supervisors..."
-chaincodeQuery "supervisors"
+# echo "Querying chaincode on peer0.supervisors..."
+# chaincodeQuery "supervisors"
 
+echo "Success"
 exit 0

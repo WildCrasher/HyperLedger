@@ -4,6 +4,7 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'java'
+    id 'distribution'
 }
 
 
@@ -48,3 +49,5 @@ shadowJar {
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-parameters"
 }
+
+installDist
