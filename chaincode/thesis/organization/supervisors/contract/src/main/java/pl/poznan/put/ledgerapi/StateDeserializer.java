@@ -1,4 +1,4 @@
-package org.example.ledgerapi;
+package pl.poznan.put.ledgerapi;
 
 @FunctionalInterface
 public interface StateDeserializer {

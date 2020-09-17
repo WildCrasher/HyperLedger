@@ -1,7 +1,7 @@
 /*
 SPDX-License-Identifier: Apache-2.0
 */
-package org.example.ledgerapi;
+package pl.poznan.put.ledgerapi;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

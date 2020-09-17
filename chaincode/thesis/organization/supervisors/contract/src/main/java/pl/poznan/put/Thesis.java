@@ -2,11 +2,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.example;
+package pl.poznan.put;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import org.example.ledgerapi.State;
+import pl.poznan.put.ledgerapi.State;
 import org.hyperledger.fabric.contract.annotation.DataType;
 import org.hyperledger.fabric.contract.annotation.Property;
 import org.json.JSONObject;
