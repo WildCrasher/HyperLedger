@@ -31,7 +31,7 @@ public class StateListImpl implements StateList {
      *
      * @param deserializer
      */
-    public StateListImpl(Context ctx, String listName, StateDeserializer deserializer) {
+    public StateListImpl(final Context ctx, final String listName, final StateDeserializer deserializer) {
         this.ctx = ctx;
         this.name = listName;
         this.deserializer = deserializer;
@@ -44,7 +44,7 @@ public class StateListImpl implements StateList {
      * serialized before writing.
      */
     @Override
-    public StateList addState(State state) {
+    public StateList addState(final State state) {
         System.out.println("Adding state " + this.name);
         ChaincodeStub stub = this.ctx.getStub();
         System.out.println("Stub=" + stub);
@@ -69,7 +69,7 @@ public class StateListImpl implements StateList {
      * before being returned.
      */
     @Override
-    public State getState(String key) {
+    public State getState(final String key) {
 
         CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, State.splitKey(key));
 
@@ -89,7 +89,7 @@ public class StateListImpl implements StateList {
      * separate becuase it is semantically distinct.
      */
     @Override
-    public StateList updateState(State state) {
+    public StateList updateState(final State state) {
         CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, state.getSplitKey());
         byte[] data = State.serialize(state);
         this.ctx.getStub().putState(ledgerKey.toString(), data);

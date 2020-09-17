@@ -13,20 +13,20 @@ import org.json.JSONObject;
 import org.json.JSONPropertyIgnore;
 
 @DataType()
-public class Thesis extends State {
+public final class Thesis extends State {
 
-    public final static String FREE = "FREE";
-    public final static String OWNED = "OWNED";
+    public static final String FREE = "FREE";
+    public static final  String OWNED = "OWNED";
 
     @Property()
-    private String state="";
+    private String state = "";
 
     public String getState() {
         return state;
     }
 
-    public Thesis setState(String state) {
-        this.state = state;
+    public Thesis setState(final String newState) {
+        this.state = newState;
         return this;
     }
 
@@ -69,8 +69,8 @@ public class Thesis extends State {
         return student;
     }
 
-    public Thesis setStudent(String student) {
-        this.student = student;
+    public Thesis setStudent(final String newStudent) {
+        this.student = newStudent;
         return this;
     }
 
@@ -79,7 +79,7 @@ public class Thesis extends State {
     }
 
     public Thesis setKey() {
-        this.key = State.makeKey(new String[] { this.thesisNumber });
+        this.setKey(State.makeKey(new String[] {this.thesisNumber}));
         return this;
     }
 
@@ -87,8 +87,8 @@ public class Thesis extends State {
         return thesisNumber;
     }
 
-    public Thesis setThesisNumber(String thesisNumber) {
-        this.thesisNumber = thesisNumber;
+    public Thesis setThesisNumber(final String newThesisNumber) {
+        this.thesisNumber = newThesisNumber;
         return this;
     }
 
@@ -96,8 +96,8 @@ public class Thesis extends State {
         return supervisor;
     }
 
-    public Thesis setSupervisor(String supervisor) {
-        this.supervisor = supervisor;
+    public Thesis setSupervisor(final String newSupervisor) {
+        this.supervisor = newSupervisor;
         return this;
     }
 
@@ -105,8 +105,8 @@ public class Thesis extends State {
         return issueDateTime;
     }
 
-    public Thesis setIssueDateTime(String issueDateTime) {
-        this.issueDateTime = issueDateTime;
+    public Thesis setIssueDateTime(final String newIssueDateTime) {
+        this.issueDateTime = newIssueDateTime;
         return this;
     }
 
@@ -114,14 +114,15 @@ public class Thesis extends State {
         return topic;
     }
 
-    public Thesis setTopic(String topic) {
-        this.topic = topic;
+    public Thesis setTopic(final String newTopic) {
+        this.topic = newTopic;
         return this;
     }
 
     @Override
     public String toString() {
-        return "Thesis::" + this.key + "   " + this.getThesisNumber() + " " + getSupervisor() + " " + getTopic() + " " + getStudent();
+        return "Thesis::" + this.getKey() + "   " + this.getThesisNumber() + " " + getSupervisor() + " "
+                + getTopic() + " " + getStudent();
     }
 
     /**
@@ -129,7 +130,7 @@ public class Thesis extends State {
      *
      * @param {Buffer} data to form back into the object
      */
-    public static Thesis deserialize(byte[] data) {
+    public static Thesis deserialize(final byte[] data) {
         JSONObject json = new JSONObject(new String(data, UTF_8));
 
         String supervisor = json.getString("supervisor");
@@ -141,15 +142,15 @@ public class Thesis extends State {
         return createInstance(supervisor, thesisNumber, issueDateTime, student, state, topic);
     }
 
-    public static byte[] serialize(Thesis paper) {
-        return State.serialize(paper);
+    public static byte[] serialize(final Thesis thesis) {
+        return State.serialize(thesis);
     }
 
     /**
      * Factory method to create a thesis object
      */
-    public static Thesis createInstance(String supervisor, String thesisNumber, String issueDateTime,
-                                        String student, String state, String topic) {
+    public static Thesis createInstance(final String supervisor, final String thesisNumber, final String issueDateTime,
+                                        final String student, final String state, final String topic) {
         return new Thesis().setSupervisor(supervisor).setThesisNumber(thesisNumber).setKey()
                 .setIssueDateTime(issueDateTime).setStudent(student).setState(state).setTopic(topic);
     }

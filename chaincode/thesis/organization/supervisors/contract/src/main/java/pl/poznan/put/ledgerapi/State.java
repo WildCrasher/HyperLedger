@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class State {
 
-    protected String key;
+    private String key;
 
     /**
      * @param {String|Object} class An identifiable class of the instance
@@ -23,10 +23,16 @@ public class State {
 
     }
 
-    String getKey() {
+    /**
+     * @return
+     */
+    public String getKey() {
         return this.key;
     }
 
+    /**
+     * @return
+     */
     public String[] getSplitKey() {
         return State.splitKey(this.key);
     }
@@ -38,7 +44,7 @@ public class State {
      * @param {Object} JSON object to serialize
      * @return {buffer} buffer with the data to store
      */
-    public static byte[] serialize(Object object) {
+    public static byte[] serialize(final Object object) {
         String jsonStr = new JSONObject(object).toString();
         return jsonStr.getBytes(UTF_8);
     }
@@ -48,13 +54,19 @@ public class State {
      *
      * @param (String[]) keyParts
      */
-    public static String makeKey(String[] keyParts) {
+    public static String makeKey(final String[] keyParts) {
         return String.join(":", keyParts);
     }
 
-    public static String[] splitKey(String key) {
+    public static String[] splitKey(final String key) {
         System.out.println("splitting key " + key + "   " + java.util.Arrays.asList(key.split(":")));
         return key.split(":");
     }
 
+    /**
+     * @param newKey
+     */
+    protected void setKey(final String newKey) {
+        this.key = newKey;
+    }
 }

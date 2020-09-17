@@ -5,11 +5,18 @@ import org.hyperledger.fabric.shim.ChaincodeStub;
 
 class ThesisContext extends Context {
 
-    public ThesisContext(ChaincodeStub stub) {
+    ThesisContext(final ChaincodeStub stub) {
         super(stub);
-        this.thesisList = new ThesisList(this);
+        this.setThesisList(new ThesisList(this));
     }
 
-    public ThesisList thesisList;
+    private ThesisList thesisList;
 
+    public ThesisList getThesisList() {
+        return thesisList;
+    }
+
+    public void setThesisList(final ThesisList newThesisList) {
+        this.thesisList = thesisList;
+    }
 }

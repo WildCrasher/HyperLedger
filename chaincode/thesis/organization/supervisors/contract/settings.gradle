@@ -1,3 +1,5 @@
-// TODO
-rootProject.name = 'thesis'
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
+rootProject.name = 'thesis'
