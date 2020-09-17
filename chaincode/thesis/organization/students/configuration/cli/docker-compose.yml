@@ -8,7 +8,7 @@ version: '2'
 networks:
   basic:
     external:
-      name: network
+      name: thesis
 
 services:
   cliStudents:

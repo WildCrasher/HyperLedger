@@ -17,7 +17,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export FABRIC_CFG_PATH="${DIR}/../config"
 
 cd "${DIR}/../network/"
-#tutaj tez te nazwy jeszcze nie sa mi znane
 docker kill cliStudents cliSupervisors logspout || true
 ./network.sh down
 ./network.sh up createChannel -ca -s couchdb
@@ -34,4 +33,4 @@ cp ${DIR}/../network/organizations/peerOrganizations/students.put.poznan.pl/user
 
 echo Suggest that you monitor the docker containers by running
 
-echo "./organization/supervisors/configuration/cli/monitordocker.sh network"
+echo "./organization/supervisors/configuration/cli/monitordocker.sh thesis"
