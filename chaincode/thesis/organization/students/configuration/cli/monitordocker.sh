@@ -5,6 +5,7 @@
 #
 # More information at https://github.com/gliderlabs/logspout/tree/master/httpstream
 
+#TODO
 if [ -z "$1" ]; then
    DOCKER_NETWORK=basicnetwork_basic
 else
