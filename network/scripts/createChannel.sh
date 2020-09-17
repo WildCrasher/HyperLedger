@@ -92,9 +92,6 @@ joinChannel() {
 
 updateAnchorPeers() {
   ORG=$1
-  echo $1
-  echo "@@@"
-  echo ${CORE_PEER_LOCALMSPID}
   setGlobals $ORG
 	local rc=1
 	local COUNTER=1
