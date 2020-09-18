@@ -31,10 +31,8 @@ elif [ "$CC_SRC_LANGUAGE" = "javascript" ]; then
 
 elif [ "$CC_SRC_LANGUAGE" = "java" ]; then
 	CC_RUNTIME_LANGUAGE=java
-	# CC_SRC_PATH="../chaincode/fabcar/java/build/install/fabcar" TODO
   CC_SRC_PATH="../chaincode/thesis/organization/supervisors/contract/build/install/thesis"
 	echo Compiling Java code ...
-  # pushd ../chaincode/fabcar/java
 	pushd ../chaincode/thesis/organization/supervisors/contract
 	./gradlew installDist
 	popd
@@ -65,7 +63,6 @@ packageChaincode() {
   ORG=$1
   setGlobals $ORG
   set -x
-  # jeszcze nie ogarnalem tego TODO
   peer lifecycle chaincode package thesis.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label thesis_${VERSION} >&log.txt
   res=$?
   set +x
@@ -80,7 +77,6 @@ installChaincode() {
   ORG=$1
   setGlobals $ORG
   set -x
-  # jeszcze nie ogarnalem tego TODO
   peer lifecycle chaincode install thesis.tar.gz >&log.txt
   res=$?
   set +x
@@ -99,7 +95,6 @@ queryInstalled() {
   res=$?
   set +x
   cat log.txt
-  # jeszcze nie ogarnalem tego TODO
 	PACKAGE_ID=$(sed -n "/thesis_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
   verifyResult $res "Query installed on peer0.${ORG} has failed"
   echo "===================== Query installed successful on peer0.${ORG} on channel ===================== "
