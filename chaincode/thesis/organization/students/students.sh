@@ -24,8 +24,7 @@ env | sort > /tmp/env.orig
 OVERRIDE_ORG="1"
 . ./scripts/envVar.sh
 
-#mozliwe ze tutaj zamiast 1 i 2 musimy byc super...
-parsePeerConnectionParameters 1 2
+parsePeerConnectionParameters "supervisors" "students"
 
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 

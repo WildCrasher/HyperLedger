@@ -25,7 +25,7 @@ OVERRIDE_ORG="2"
 . ./scripts/envVar.sh
 
 #TODO
-parsePeerConnectionParameters 1 2
+parsePeerConnectionParameters "supervisors" "students"
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 
 # set the fabric config path
