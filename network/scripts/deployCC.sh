@@ -284,13 +284,13 @@ queryCommitted "supervisors"
 queryCommitted "students"
 
 ## Invoke the chaincode
-chaincodeInvokeInit "supervisors" "students"
+# chaincodeInvokeInit "supervisors" "students"
 
 # sleep 10
 
 # Query chaincode on peer0.supervisors
-echo "Querying chaincode on peer0.supervisors..."
-chaincodeQuery "supervisors"
+# echo "Querying chaincode on peer0.supervisors..."
+# chaincodeQuery "supervisors"
 
 echo "Success"
 exit 0
