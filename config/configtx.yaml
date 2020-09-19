@@ -326,15 +326,15 @@ Orderer: &OrdererDefaults
         # a subset of the host:port items enumerated in this list should be
         # replicated under the Orderer.Addresses key above.
         Consenters:
-            - Host: raft0.example.com
+            - Host: raft0.put.poznan.pl
               Port: 7050
               ClientTLSCert: path/to/ClientTLSCert0
               ServerTLSCert: path/to/ServerTLSCert0
-            - Host: raft1.example.com
+            - Host: raft1.put.poznan.pl
               Port: 7050
               ClientTLSCert: path/to/ClientTLSCert1
               ServerTLSCert: path/to/ServerTLSCert1
-            - Host: raft2.example.com
+            - Host: raft2.put.poznan.pl
               Port: 7050
               ClientTLSCert: path/to/ClientTLSCert2
               ServerTLSCert: path/to/ServerTLSCert2

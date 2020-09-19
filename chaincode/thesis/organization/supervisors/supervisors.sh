@@ -24,7 +24,6 @@ env | sort > /tmp/env.orig
 OVERRIDE_ORG="2"
 . ./scripts/envVar.sh
 
-#TODO
 parsePeerConnectionParameters "supervisors" "students"
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 

@@ -239,7 +239,6 @@ function createOrgs() {
 
   # Create crypto material using Fabric CAs
   if [ "$CRYPTO" == "Certificate Authorities" ]; then
-
     echo
     echo "##########################################################"
     echo "##### Generate certificates using Fabric CA's ############"
