@@ -4,7 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 package pl.poznan.put;
 
 import java.util.logging.Logger;
-
 import pl.poznan.put.ledgerapi.State;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
@@ -29,15 +28,29 @@ public final class ThesisContract implements ContractInterface {
 
     }
 
-    @Transaction
+    @Transaction()
     public void instantiate(final ThesisContext ctx) {
         // No implementation required with this example
         // It could be where data migration is performed, if necessary
         LOG.info("No data migration to perform");
     }
 
+    @Transaction()
+    public void initLedger(final ThesisContext ctx) {
+        System.out.println(ctx);
+        Thesis thesis1 = Thesis.createInstance("Promotor1", "1", "2020-09-18",
+                "", Thesis.FREE, "temat1");
+        Thesis thesis2 = Thesis.createInstance("Promotor2", "2", "2020-09-18",
+                "student1", Thesis.OWNED, "temat2");
+        System.out.println(thesis1);
+        System.out.println("test3");
+        System.out.println(ctx.getThesisList());
+        ctx.getThesisList().addThesis(thesis1);
+        System.out.println("test4");
+    }
 
-    @Transaction
+
+    @Transaction()
     public Thesis issue(final ThesisContext ctx, final String supervisor, final String thesisNumber,
                         final String issueDateTime, final String topic) {
 
@@ -54,7 +67,7 @@ public final class ThesisContract implements ContractInterface {
         return thesis;
     }
 
-    @Transaction
+    @Transaction()
     public Thesis asignStudent(final ThesisContext ctx, final String thesisNumber, final String student) {
 
         String thesisKey = State.makeKey(new String[] {thesisNumber});
@@ -70,6 +83,17 @@ public final class ThesisContract implements ContractInterface {
         }
 
         ctx.getThesisList().updateThesis(thesis);
+        return thesis;
+    }
+
+    @Transaction()
+    public Thesis queryThesis(final ThesisContext ctx, final String thesisNumber) {
+        String thesisKey = State.makeKey(new String[] {thesisNumber});
+        Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
+        if (thesis == null) {
+            throw new RuntimeException("Thesis " + thesisNumber + " not found");
+        }
+
         return thesis;
     }
 }

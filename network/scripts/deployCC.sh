@@ -230,7 +230,7 @@ chaincodeQuery() {
     sleep $DELAY
     echo "Attempting to Query peer0.${ORG}, Retry after $DELAY seconds."
     set -x
-    peer chaincode query -C $CHANNEL_NAME -n thesis -c '{"Args":["queryAllCars"]}' >&log.txt
+    peer chaincode query -C $CHANNEL_NAME -n thesis -c '{"Args":["queryThesis", "1"]}' >&log.txt
     res=$?
     set +x
 		let rc=$res
@@ -284,13 +284,13 @@ queryCommitted "supervisors"
 queryCommitted "students"
 
 ## Invoke the chaincode
-# chaincodeInvokeInit "supervisors" "students"
+chaincodeInvokeInit "supervisors" "students"
 
 # sleep 10
 
 # Query chaincode on peer0.supervisors
-# echo "Querying chaincode on peer0.supervisors..."
-# chaincodeQuery "supervisors"
+echo "Querying chaincode on peer0.supervisors..."
+chaincodeQuery "supervisors"
 
 echo "Success"
 exit 0

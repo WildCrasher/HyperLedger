@@ -1,5 +1,5 @@
 {
-    "name": "test-network-${ORGPath}",
+    "name": "thesis-network-${ORGPath}",
     "version": "1.0.0",
     "client": {
         "organization": "${ORGName}",
