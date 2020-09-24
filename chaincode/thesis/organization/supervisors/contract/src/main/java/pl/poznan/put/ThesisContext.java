@@ -17,6 +17,6 @@ class ThesisContext extends Context {
     }
 
     public void setThesisList(final ThesisList newThesisList) {
-        this.thesisList = thesisList;
+        this.thesisList = newThesisList;
     }
 }

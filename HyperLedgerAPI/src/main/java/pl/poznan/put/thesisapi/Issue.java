@@ -19,9 +19,7 @@ import org.hyperledger.fabric.gateway.Wallets;
 
 public class Issue {
 
-  private static final String ENVKEY="CONTRACT_NAME";
-
-  public void run() {
+  public void run(Thesis thesis) {
 
     Gateway.Builder builder = Gateway.createBuilder();
 
@@ -44,11 +42,17 @@ public class Issue {
         System.out.println("Use network channel: mychannel.");
         Network network = gateway.getNetwork("mychannel");
 
-        System.out.println("Use pl.poznan.put.thesis smart contract.");
+        System.out.println("Use thesis smart contract.");
         Contract contract = network.getContract("thesis");
 
         System.out.println("Submit thesis issue transaction.");
-        byte[] response = contract.submitTransaction("issue", "promotor1", "1", "2020-09-19", "temat");
+        byte[] response = contract.submitTransaction(
+                "issue",
+                thesis.getSupervisor(),
+                thesis.getThesisNumber(),
+                thesis.getIssueDateTime(),
+                thesis.getTopic()
+        );
 
         System.out.println(response);
       }

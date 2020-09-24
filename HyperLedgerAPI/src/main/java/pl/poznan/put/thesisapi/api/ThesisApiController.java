@@ -1,19 +1,25 @@
 package pl.poznan.put.thesisapi.api;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import pl.poznan.put.thesisapi.AddToWallet;
 import pl.poznan.put.thesisapi.Issue;
+import pl.poznan.put.thesisapi.Query;
+import pl.poznan.put.thesisapi.Thesis;
 
 @RestController()
 @RequestMapping("/api/thesis")
 public class ThesisApiController {
 
     @PostMapping()
-    public String issue() {
+    public String issue(@RequestBody() Thesis thesis) {
         new AddToWallet().run();
-        new Issue().run();
-        return "ok2";
+        new Issue().run(thesis);
+        return "ok";
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String query(@PathVariable(value = "id") String id) {
+        return new Query().run(id);
     }
 }
