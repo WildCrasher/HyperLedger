@@ -1,0 +1,63 @@
+---
+name: test-network-supervisors
+version: 1.0.0
+client:
+  organization: Supervisors
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  Supervisors:
+    mspid: SupervisorsMSP
+    peers:
+    - peer0.supervisors.put.poznan.pl
+    certificateAuthorities:
+    - ca.supervisors.put.poznan.pl
+peers:
+  peer0.supervisors.put.poznan.pl:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUGYEKSXycnise11b39yEHCvuMbpUwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIwMDkyNDA4MDkwMFoXDTM1MDkyMTA4MDkwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzEZoQLpKSuIXj+zPHVBurBBF
+          dqTF0X/5N49dFp6qjz8Ta4wymsTane5VQeHKU7ghl5kmanODLUkXWLJg4n9Mr6NF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FPSJWx3WeW6HHwBkxDzIk8CtneaSMAoGCCqGSM49BAMCA0cAMEQCICtQKOyPfNE2
+          fD+UtxM/+KeIj0rgeGoofM//uQRYYiPwAiBAevb322LesStNlEKBlS8yDdl9RUX5
+          MlgtXZdatt9x/Q==
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.supervisors.put.poznan.pl
+      hostnameOverride: peer0.supervisors.put.poznan.pl
+certificateAuthorities:
+  ca.supervisors.put.poznan.pl:
+    url: https://localhost:7054
+    caName: ca-supervisors
+    tlsCACerts:
+      pem: 
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUGYEKSXycnise11b39yEHCvuMbpUwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIwMDkyNDA4MDkwMFoXDTM1MDkyMTA4MDkwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzEZoQLpKSuIXj+zPHVBurBBF
+          dqTF0X/5N49dFp6qjz8Ta4wymsTane5VQeHKU7ghl5kmanODLUkXWLJg4n9Mr6NF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FPSJWx3WeW6HHwBkxDzIk8CtneaSMAoGCCqGSM49BAMCA0cAMEQCICtQKOyPfNE2
+          fD+UtxM/+KeIj0rgeGoofM//uQRYYiPwAiBAevb322LesStNlEKBlS8yDdl9RUX5
+          MlgtXZdatt9x/Q==
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false
