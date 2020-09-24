@@ -32,3 +32,8 @@ build/
 
 ### binaries ###
 bin
+
+### network ###
+network/organizations/fabric-ca/students
+network/organizations/fabric-ca/supervisors
+network/organizations/fabric-ca/ordererOrg
