@@ -399,7 +399,7 @@ function checkSystem() {
       MINGW*)     machine=MinGw;;
       *)          machine="UNKNOWN:${unameOut}"
   esac
-  return ${machine}
+  echo ${machine}
 }
 
 
@@ -418,7 +418,7 @@ function networkDown() {
     # remove orderer block and other channel configuration transactions and certs
     rm -rf system-genesis-block/*.block organizations/peerOrganizations organizations/ordererOrganizations
     ## remove fabric ca artifacts
-    local system=checkSystem
+    local system=$(checkSystem)
     if [ "$system" = "Linux" ]; then
       sudo rm -rf organizations/fabric-ca/supervisors/msp organizations/fabric-ca/supervisors/tls-cert.pem organizations/fabric-ca/supervisors/ca-cert.pem organizations/fabric-ca/supervisors/IssuerPublicKey organizations/fabric-ca/supervisors/IssuerRevocationPublicKey organizations/fabric-ca/supervisors/fabric-ca-server.db
       sudo rm -rf organizations/fabric-ca/students/msp organizations/fabric-ca/students/tls-cert.pem organizations/fabric-ca/students/ca-cert.pem organizations/fabric-ca/students/IssuerPublicKey organizations/fabric-ca/students/IssuerRevocationPublicKey organizations/fabric-ca/students/fabric-ca-server.db
