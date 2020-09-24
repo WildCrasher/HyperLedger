@@ -406,11 +406,12 @@ function networkDown() {
     # remove orderer block and other channel configuration transactions and certs
     rm -rf system-genesis-block/*.block organizations/peerOrganizations organizations/ordererOrganizations
     ## remove fabric ca artifacts
-    rm -rf organizations/fabric-ca/supervisors/msp organizations/fabric-ca/supervisors/tls-cert.pem organizations/fabric-ca/supervisors/ca-cert.pem organizations/fabric-ca/supervisors/IssuerPublicKey organizations/fabric-ca/supervisors/IssuerRevocationPublicKey organizations/fabric-ca/supervisors/fabric-ca-server.db
-    rm -rf organizations/fabric-ca/students/msp organizations/fabric-ca/students/tls-cert.pem organizations/fabric-ca/students/ca-cert.pem organizations/fabric-ca/students/IssuerPublicKey organizations/fabric-ca/students/IssuerRevocationPublicKey organizations/fabric-ca/students/fabric-ca-server.db
-    rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db
-    rm -rf addOrg3/fabric-ca/org3/msp addOrg3/fabric-ca/org3/tls-cert.pem addOrg3/fabric-ca/org3/ca-cert.pem addOrg3/fabric-ca/org3/IssuerPublicKey addOrg3/fabric-ca/org3/IssuerRevocationPublicKey addOrg3/fabric-ca/org3/fabric-ca-server.db
-
+    sudo rm -rf organizations/fabric-ca/supervisors/msp organizations/fabric-ca/supervisors/tls-cert.pem organizations/fabric-ca/supervisors/ca-cert.pem organizations/fabric-ca/supervisors/IssuerPublicKey organizations/fabric-ca/supervisors/IssuerRevocationPublicKey organizations/fabric-ca/supervisors/fabric-ca-server.db
+    sudo rm -rf organizations/fabric-ca/students/msp organizations/fabric-ca/students/tls-cert.pem organizations/fabric-ca/students/ca-cert.pem organizations/fabric-ca/students/IssuerPublicKey organizations/fabric-ca/students/IssuerRevocationPublicKey organizations/fabric-ca/students/fabric-ca-server.db
+    sudo rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db
+    #rm -rf addOrg3/fabric-ca/org3/msp addOrg3/fabric-ca/org3/tls-cert.pem addOrg3/fabric-ca/org3/ca-cert.pem addOrg3/fabric-ca/org3/IssuerPublicKey addOrg3/fabric-ca/org3/IssuerRevocationPublicKey addOrg3/fabric-ca/org3/fabric-ca-server.db
+    rm -rf ../organization/supervisors/gateway/*
+    rm -rf ../organization/students/gateway/*
 
     # remove channel and script artifacts
     rm -rf channel-artifacts log.txt thesis.tar.gz thesis
