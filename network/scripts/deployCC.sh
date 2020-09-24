@@ -106,7 +106,7 @@ approveForMyOrg() {
   ORG=$1
   setGlobals $ORG
   set -x
-  peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
+  peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
   set +x
   cat log.txt
   verifyResult $res "Chaincode definition approved on peer0.${ORG} on channel '$CHANNEL_NAME' failed"
@@ -128,7 +128,7 @@ checkCommitReadiness() {
     sleep $DELAY
     echo "Attempting to check the commit readiness of the chaincode definition on peer0.${ORG}, Retry after $DELAY seconds."
     set -x
-    peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --sequence ${VERSION} --output json --init-required >&log.txt
+    peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name thesis --version ${VERSION} --sequence ${VERSION} --output json >&log.txt
     res=$?
     set +x
     let rc=0
@@ -158,7 +158,7 @@ commitChaincodeDefinition() {
   # peer (if join was successful), let's supply it directly as we know
   # it using the "-o" option
   set -x
-  peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+  peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.put.poznan.pl --tls --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name thesis $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} >&log.txt
   res=$?
   set +x
   cat log.txt
