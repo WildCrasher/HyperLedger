@@ -23,13 +23,6 @@ public class Issue {
 
   public void run() {
 
-    String contractName="thesiscontract";
-    // get the name of the contract, in case it is overridden
-    Map<String,String> envvar = System.getenv();
-    if (envvar.containsKey(ENVKEY)){
-      contractName=envvar.get(ENVKEY);
-    }
-
     Gateway.Builder builder = Gateway.createBuilder();
 
     try {
@@ -52,7 +45,7 @@ public class Issue {
         Network network = gateway.getNetwork("mychannel");
 
         System.out.println("Use pl.poznan.put.thesis smart contract.");
-        Contract contract = network.getContract(contractName, "pl.poznan.put.thesis");
+        Contract contract = network.getContract("thesis");
 
         System.out.println("Submit thesis issue transaction.");
         byte[] response = contract.submitTransaction("issue", "promotor1", "1", "2020-09-19", "temat");
