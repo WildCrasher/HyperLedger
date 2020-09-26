@@ -3,6 +3,8 @@ package pl.poznan.put.ledgerapi;
 import pl.poznan.put.ledgerapi.impl.StateListImpl;
 import org.hyperledger.fabric.contract.Context;
 
+import java.util.ArrayList;
+
 public interface StateList {
 
     /*
@@ -36,6 +38,13 @@ public interface StateList {
      * before being returned.
      */
     State getState(String key);
+
+    /**
+     * Get all states from the list.
+     * State data is deserialized into JSON object
+     * before being returned.
+     */
+    ArrayList<State> getAllStates();
 
     /**
      * Update a state in the list. Puts the new state in world state with

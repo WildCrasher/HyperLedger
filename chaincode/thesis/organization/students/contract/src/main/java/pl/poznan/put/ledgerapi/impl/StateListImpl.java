@@ -1,7 +1,11 @@
 package pl.poznan.put.ledgerapi.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.hyperledger.fabric.shim.ledger.KeyValue;
+import org.hyperledger.fabric.shim.ledger.QueryResultsIterator;
 import pl.poznan.put.ledgerapi.State;
 import pl.poznan.put.ledgerapi.StateDeserializer;
 import pl.poznan.put.ledgerapi.StateList;
@@ -31,7 +35,7 @@ public class StateListImpl implements StateList {
      *
      * @param deserializer
      */
-    public StateListImpl(Context ctx, String listName, StateDeserializer deserializer) {
+    public StateListImpl(final Context ctx, final String listName, final StateDeserializer deserializer) {
         this.ctx = ctx;
         this.name = listName;
         this.deserializer = deserializer;
@@ -44,7 +48,7 @@ public class StateListImpl implements StateList {
      * serialized before writing.
      */
     @Override
-    public StateList addState(State state) {
+    public StateList addState(final State state) {
         System.out.println("Adding state " + this.name);
         ChaincodeStub stub = this.ctx.getStub();
         System.out.println("Stub=" + stub);
@@ -69,7 +73,7 @@ public class StateListImpl implements StateList {
      * before being returned.
      */
     @Override
-    public State getState(String key) {
+    public State getState(final String key) {
 
         CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, State.splitKey(key));
 
@@ -83,13 +87,31 @@ public class StateListImpl implements StateList {
     }
 
     /**
+     * Get all states from the list.
+     * State data is deserialized into JSON object
+     * before being returned.
+     */
+    @Override
+    public ArrayList<State> getAllStates() {
+        ArrayList<State> queryResults = new ArrayList<State>();
+
+        QueryResultsIterator<KeyValue> results = this.ctx.getStub().getStateByRange("", "");
+
+        for (KeyValue result: results) {
+            queryResults.add(this.deserializer.deserialize(result.getValue()));
+        }
+
+        return queryResults;
+    }
+
+    /**
      * Update a state in the list. Puts the new state in world state with
      * appropriate composite key. Note that state defines its own key. A state is
      * serialized before writing. Logic is very similar to addState() but kept
      * separate becuase it is semantically distinct.
      */
     @Override
-    public StateList updateState(State state) {
+    public StateList updateState(final State state) {
         CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, state.getSplitKey());
         byte[] data = State.serialize(state);
         this.ctx.getStub().putState(ledgerKey.toString(), data);

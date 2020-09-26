@@ -20,6 +20,13 @@ public class ThesisApiController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String query(@PathVariable(value = "id") String id) {
+        new AddToWallet().run();
         return new Query().run(id);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public String query() {
+        new AddToWallet().run();
+        return new Query().getAll();
     }
 }

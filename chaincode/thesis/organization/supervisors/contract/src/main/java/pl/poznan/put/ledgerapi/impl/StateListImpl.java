@@ -1,7 +1,10 @@
 package pl.poznan.put.ledgerapi.impl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+//import java.util.Arrays;
 
+import org.hyperledger.fabric.shim.ledger.KeyValue;
+import org.hyperledger.fabric.shim.ledger.QueryResultsIterator;
 import pl.poznan.put.ledgerapi.State;
 import pl.poznan.put.ledgerapi.StateDeserializer;
 import pl.poznan.put.ledgerapi.StateList;
@@ -45,20 +48,13 @@ public class StateListImpl implements StateList {
      */
     @Override
     public StateList addState(final State state) {
-        System.out.println("Adding state " + this.name);
         ChaincodeStub stub = this.ctx.getStub();
-        System.out.println("Stub=" + stub);
-        String[] splitKey = state.getSplitKey();
-        System.out.println("Split key " + Arrays.asList(splitKey));
-
-        CompositeKey ledgerKey = stub.createCompositeKey(this.name, splitKey);
-        System.out.println("ledgerkey is ");
-        System.out.println(ledgerKey);
+//        String[] splitKey = state.getSplitKey();
+//
+//        CompositeKey ledgerKey = stub.createCompositeKey(this.name, splitKey);
 
         byte[] data = State.serialize(state);
-        System.out.println("ctx" + this.ctx);
-        System.out.println("stub" + this.ctx.getStub());
-        this.ctx.getStub().putState(ledgerKey.toString(), data);
+        this.ctx.getStub().putState(state.getKey(), data);
 
         return this;
     }
@@ -71,15 +67,33 @@ public class StateListImpl implements StateList {
     @Override
     public State getState(final String key) {
 
-        CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, State.splitKey(key));
+//        CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, State.splitKey(key));
 
-        byte[] data = this.ctx.getStub().getState(ledgerKey.toString());
+        byte[] data = this.ctx.getStub().getState(key);
         if (data != null) {
             State state = this.deserializer.deserialize(data);
             return state;
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get all states from the list.
+     * State data is deserialized into JSON object
+     * before being returned.
+     */
+    @Override
+    public ArrayList<State> getAllStates() {
+        ArrayList<State> queryResults = new ArrayList<State>();
+
+        QueryResultsIterator<KeyValue> results = this.ctx.getStub().getStateByRange(" ", "Z");
+
+        for (KeyValue result: results) {
+            queryResults.add(this.deserializer.deserialize(result.getValue()));
+        }
+
+        return queryResults;
     }
 
     /**

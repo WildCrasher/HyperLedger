@@ -3,7 +3,10 @@ SPDX-License-Identifier: Apache-2.0
 */
 package pl.poznan.put;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import com.google.gson.Gson;
 import pl.poznan.put.ledgerapi.State;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
@@ -37,16 +40,11 @@ public final class ThesisContract implements ContractInterface {
 
     @Transaction()
     public void initLedger(final ThesisContext ctx) {
-        System.out.println(ctx);
         Thesis thesis1 = Thesis.createInstance("Promotor1", "1", "2020-09-18",
                 "", Thesis.FREE, "temat1");
         Thesis thesis2 = Thesis.createInstance("Promotor2", "2", "2020-09-18",
                 "student1", Thesis.OWNED, "temat2");
-        System.out.println(thesis1);
-        System.out.println("test3");
-        System.out.println(ctx.getThesisList());
         ctx.getThesisList().addThesis(thesis1);
-        System.out.println("test4");
     }
 
 
@@ -56,7 +54,7 @@ public final class ThesisContract implements ContractInterface {
 
         System.out.println(ctx);
 
-        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, "", "", topic);
+        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", "Z", topic);
 
         thesis.setFree();
 
@@ -95,5 +93,16 @@ public final class ThesisContract implements ContractInterface {
         }
 
         return thesis;
+    }
+
+    @Transaction()
+    public String queryAllThesis(final ThesisContext ctx) {
+
+        ArrayList<Thesis> thesis = ctx.getThesisList().getAllThesis();
+        if (thesis == null) {
+            throw new RuntimeException("No thesis found");
+        }
+
+        return new Gson().toJson(thesis);
     }
 }
