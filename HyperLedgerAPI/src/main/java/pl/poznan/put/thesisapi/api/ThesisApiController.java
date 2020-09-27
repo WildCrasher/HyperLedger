@@ -7,6 +7,7 @@ import pl.poznan.put.thesisapi.Issue;
 import pl.poznan.put.thesisapi.Query;
 import pl.poznan.put.thesisapi.Thesis;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController()
 @RequestMapping("/api/thesis")
 public class ThesisApiController {
