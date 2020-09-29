@@ -2,32 +2,41 @@ package pl.poznan.put.thesisapi.api;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import pl.poznan.put.thesisapi.AddToWallet;
-import pl.poznan.put.thesisapi.Issue;
-import pl.poznan.put.thesisapi.Query;
 import pl.poznan.put.thesisapi.Thesis;
+import pl.poznan.put.thesisapi.repositories.ThesisRepository;
+import pl.poznan.put.thesisapi.user.Supervisor;
+import pl.poznan.put.thesisapi.user.User;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController()
 @RequestMapping("/api/thesis")
 public class ThesisApiController {
 
+    private final ThesisRepository thesisRepository;
+
+    public ThesisApiController(final ThesisRepository thesisRepository) {
+        this.thesisRepository = thesisRepository;
+    }
+
     @PostMapping()
-    public String issue(@RequestBody() Thesis thesis) {
-        new AddToWallet().run();
-        new Issue().run(thesis);
+    public String addThesis(@RequestBody() Thesis thesis) {
+        User user = new Supervisor("User1");
+        user.addToWallet();
+        this.thesisRepository.save(thesis, user);
         return "ok";
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String query(@PathVariable(value = "id") String id) {
-        new AddToWallet().run();
-        return new Query().run(id);
+    public String getThesis(@PathVariable(value = "id") String id) {
+        User user = new Supervisor("User1");
+        user.addToWallet();
+        return this.thesisRepository.getById(id, user);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public String query() {
-        new AddToWallet().run();
-        return new Query().getAll();
+    public String getAllThesis() {
+        User user = new Supervisor("User1");
+        user.addToWallet();
+        return this.thesisRepository.getAll(user);
     }
 }
