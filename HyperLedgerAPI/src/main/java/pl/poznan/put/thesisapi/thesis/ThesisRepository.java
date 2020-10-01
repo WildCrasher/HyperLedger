@@ -1,6 +1,5 @@
-package pl.poznan.put.thesisapi.repositories;
+package pl.poznan.put.thesisapi.thesis;
 
-import pl.poznan.put.thesisapi.Thesis;
 import pl.poznan.put.thesisapi.user.User;
 
 public interface ThesisRepository {
