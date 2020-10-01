@@ -1,4 +1,4 @@
-package pl.poznan.put.thesisapi.user;
+package pl.poznan.put.thesisapi.entities;
 
 import pl.poznan.put.thesisapi.customValidators.PasswordMatches;
 import pl.poznan.put.thesisapi.customValidators.UserRole;

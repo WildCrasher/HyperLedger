@@ -1,8 +1,11 @@
 package pl.poznan.put.thesisapi.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.poznan.put.thesisapi.entities.UserDto;
+import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.exceptions.UserAlreadyExistException;
+
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -14,7 +17,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User registerNewUserAccount(UserDto userDto)
+    public UserEntity registerNewUserAccount(UserDto userDto)
             throws UserAlreadyExistException {
 
         if (usernameExists(userDto.getName())) {
@@ -22,10 +25,16 @@ public class UserService implements IUserService {
                     "There is an account with that username: "
                             + userDto.getName());
         }
-        User user = new User();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userDto.getName());
+        userEntity.setPassword(userDto.getPassword());
+        userEntity.setRole(userDto.getRole());
 
+        return this.userRepository.save(userEntity);
+    }
 
-        return this.userRepository.save(user);
+    public List<UserEntity> list() {
+        return userRepository.findAll();
     }
 
     private boolean usernameExists(String username) {

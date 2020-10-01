@@ -1,6 +1,6 @@
 package pl.poznan.put.thesisapi.customValidators;
 
-import pl.poznan.put.thesisapi.user.UserDto;
+import pl.poznan.put.thesisapi.entities.UserDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
