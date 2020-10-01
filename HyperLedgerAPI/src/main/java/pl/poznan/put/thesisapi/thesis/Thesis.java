@@ -1,4 +1,4 @@
-package pl.poznan.put.thesisapi;
+package pl.poznan.put.thesisapi.thesis;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -2,9 +2,9 @@ package pl.poznan.put.thesisapi.api;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import pl.poznan.put.thesisapi.Thesis;
 import pl.poznan.put.thesisapi.entities.UserEntity;
-import pl.poznan.put.thesisapi.repositories.ThesisRepository;
+import pl.poznan.put.thesisapi.thesis.Thesis;
+import pl.poznan.put.thesisapi.thesis.ThesisRepository;
 import pl.poznan.put.thesisapi.user.Supervisor;
 import pl.poznan.put.thesisapi.user.User;
 import pl.poznan.put.thesisapi.user.UserService;
