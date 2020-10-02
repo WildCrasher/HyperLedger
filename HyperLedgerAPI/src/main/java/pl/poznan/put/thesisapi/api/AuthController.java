@@ -32,6 +32,17 @@ public class AuthController {
         return "Success";
     }
 
+    @PostMapping("/login")
+    public String loginUser(@RequestBody() UserDto userDto) {
+        String jwt = "";
+        try {
+            jwt = userService.loginUser(userDto);
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+        return jwt;
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String testDb() {
         List<UserEntity> result = userService.list();
