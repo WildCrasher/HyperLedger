@@ -50,7 +50,7 @@ public class StudentsAdmin implements User {
             Enrollment enrollment = caClient.enroll("admin", "adminpw", enrollmentRequestTLS);
             Identity user = Identities.newX509Identity("StudentsMSP", enrollment);
             wallet.put("admin@students.put.poznan.pl", user);
-            identity = (X509Identity)wallet.get("admin@supervisors.put.poznan.pl");
+            identity = (X509Identity)wallet.get("admin@students.put.poznan.pl");
             System.out.println("Successfully enrolled user \"admin\" and imported it into the wallet");
         } catch (Exception e) {
             System.err.println("Error adding to wallet");
