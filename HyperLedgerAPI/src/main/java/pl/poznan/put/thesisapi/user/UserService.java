@@ -44,6 +44,10 @@ public class UserService implements IUserService, UserDetailsService {
         userEntity.setPassword(userDto.getPassword());
         userEntity.setRole(userDto.getRole());
 
+        User user = userEntity.convertToUser();
+        System.out.println();
+        user.register();
+
         return this.userRepository.save(userEntity);
     }
 

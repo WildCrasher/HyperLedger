@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pl.poznan.put.thesisapi.thesis.Thesis;
 import pl.poznan.put.thesisapi.thesis.ThesisRepository;
+import pl.poznan.put.thesisapi.user.Student;
 import pl.poznan.put.thesisapi.user.Supervisor;
 import pl.poznan.put.thesisapi.user.User;
 import pl.poznan.put.thesisapi.user.UserService;
@@ -26,23 +27,20 @@ public class ThesisApiController {
 
     @PostMapping()
     public String addThesis(@RequestBody() Thesis thesis) {
-        User user = new Supervisor("User1");
-        user.addToWallet();
+        User user = new Student("Uzytkownik2");
         this.thesisRepository.save(thesis, user);
         return "ok";
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getThesis(@PathVariable(value = "id") String id) {
-        User user = new Supervisor("User1");
-        user.addToWallet();
+        User user = new Student("Uzytkownik2");
         return this.thesisRepository.getById(id, user);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String getAllThesis() {
-        User user = new Supervisor("User1");
-        user.addToWallet();
+        User user = new Student("Uzytkownik2");
         return this.thesisRepository.getAll(user);
     }
 }
