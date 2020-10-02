@@ -1,12 +1,15 @@
 package pl.poznan.put.thesisapi.api;
 
 import com.google.gson.Gson;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.exceptions.UserAlreadyExistException;
 import pl.poznan.put.thesisapi.entities.UserDto;
 import pl.poznan.put.thesisapi.user.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,9 +20,14 @@ import java.util.List;
 public class AuthController {
 
     private UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AuthController(final UserService userService) {
+    public AuthController(
+            final UserService userService,
+            final BCryptPasswordEncoder bCryptPasswordEncoder
+    ) {
         this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/register")
@@ -36,6 +44,7 @@ public class AuthController {
     public String loginUser(@RequestBody() UserDto userDto) {
         String jwt = "";
         try {
+            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             jwt = userService.loginUser(userDto);
         } catch (Exception ex) {
             return ex.getMessage();
@@ -47,5 +56,10 @@ public class AuthController {
     public String testDb() {
         List<UserEntity> result = userService.list();
         return new Gson().toJson(result);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

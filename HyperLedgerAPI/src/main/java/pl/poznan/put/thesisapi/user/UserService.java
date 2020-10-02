@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.poznan.put.thesisapi.entities.UserDto;
 import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.exceptions.UserAlreadyExistException;
@@ -20,14 +19,11 @@ import static java.util.Collections.emptyList;
 public class UserService implements IUserService, UserDetailsService {
 
     private UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(
-            final UserRepository userRepository,
-            final BCryptPasswordEncoder bCryptPasswordEncoder
+            final UserRepository userRepository
     ) {
         this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -61,17 +57,11 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     public String loginUser(UserDto userDto) {
-        userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         return "jwt";
     }
 
     public List<UserEntity> list() {
         return userRepository.findAll();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     private boolean usernameExists(String username) {
