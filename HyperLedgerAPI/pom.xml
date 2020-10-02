@@ -66,6 +66,7 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+<<<<<<< Updated upstream
 		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -77,6 +78,13 @@
 			<artifactId>assertj-core</artifactId>
 		</dependency>
 
+=======
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+>>>>>>> Stashed changes
 	</dependencies>
 
 	<build>
