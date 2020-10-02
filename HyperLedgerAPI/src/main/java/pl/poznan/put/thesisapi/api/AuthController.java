@@ -20,7 +20,7 @@ import java.util.List;
 public class AuthController {
 
     private UserService userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AuthController(
             final UserService userService,
@@ -56,10 +56,5 @@ public class AuthController {
     public String testDb() {
         List<UserEntity> result = userService.list();
         return new Gson().toJson(result);
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
