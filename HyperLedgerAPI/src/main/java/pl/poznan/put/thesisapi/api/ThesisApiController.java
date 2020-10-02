@@ -1,5 +1,6 @@
 package pl.poznan.put.thesisapi.api;
 
+import com.google.gson.Gson;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pl.poznan.put.thesisapi.thesis.Thesis;
@@ -29,18 +30,18 @@ public class ThesisApiController {
     public String addThesis(@RequestBody() Thesis thesis) {
         User user = new Student("Uzytkownik2");
         this.thesisRepository.save(thesis, user);
-        return "ok";
+        return new Gson().toJson("ok");
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getThesis(@PathVariable(value = "id") String id) {
         User user = new Student("Uzytkownik2");
-        return this.thesisRepository.getById(id, user);
+        return new Gson().toJson(this.thesisRepository.getById(id, user));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String getAllThesis() {
         User user = new Student("Uzytkownik2");
-        return this.thesisRepository.getAll(user);
+        return new Gson().toJson(this.thesisRepository.getAll(user));
     }
 }

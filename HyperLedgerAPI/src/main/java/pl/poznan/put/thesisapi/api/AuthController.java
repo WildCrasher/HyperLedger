@@ -33,11 +33,12 @@ public class AuthController {
     @PostMapping("/register")
     public String registerUser(@Valid @RequestBody UserDto userDto) {
         try {
+            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             UserEntity registered = userService.registerNewUserAccount(userDto);
         } catch (UserAlreadyExistException uaeEx) {
             return uaeEx.getMessage();
         }
-        return "Success";
+        return new Gson().toJson("success");
     }
 
     @PostMapping("/login")
