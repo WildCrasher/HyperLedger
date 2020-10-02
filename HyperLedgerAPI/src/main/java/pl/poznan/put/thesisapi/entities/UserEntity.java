@@ -61,7 +61,8 @@ public class UserEntity {
     }
 
     public User convertToUser() {
-        if(this.role == "supervisor") {
+        System.out.println(this.role);
+        if(this.role.equals("supervisor")) {
             return new Supervisor(this.username);
         }
         return new Student(this.username);

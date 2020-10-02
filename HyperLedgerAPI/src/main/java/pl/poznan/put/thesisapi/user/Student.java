@@ -4,6 +4,11 @@ import org.hyperledger.fabric.gateway.Identities;
 import org.hyperledger.fabric.gateway.Identity;
 import org.hyperledger.fabric.gateway.Wallet;
 import org.hyperledger.fabric.gateway.Wallets;
+import org.hyperledger.fabric.sdk.Enrollment;
+import org.hyperledger.fabric.sdk.security.CryptoSuite;
+import org.hyperledger.fabric.sdk.security.CryptoSuiteFactory;
+import org.hyperledger.fabric_ca.sdk.HFCAClient;
+import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,6 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
 public class Student implements User {
 
@@ -24,7 +30,41 @@ public class Student implements User {
 
     @Override
     public void register() {
+        try {
+            // Create a CA client for interacting with the CA.
+            Properties props = new Properties();
+            props.put("pemFile",
+                    "../network/organizations/peerOrganizations/students.put.poznan.pl/ca/ca.students.put.poznan.pl-cert.pem");
+            props.put("allowAllHostNames", "true");
+            HFCAClient caClient = HFCAClient.createNewInstance("https://localhost:8054", props);
+            CryptoSuite cryptoSuite = CryptoSuiteFactory.getDefault().getCryptoSuite();
+            caClient.setCryptoSuite(cryptoSuite);
 
+            // Create a wallet for managing identities
+            Wallet wallet = Wallets.newFileSystemWallet(Paths.get("wallet"));
+
+            // Check to see if we've already enrolled the user.
+            if (wallet.get(this.getFullName()) != null) {
+                System.out.println("An identity for the user " + this.name + " already exists in the wallet");
+                return;
+            }
+
+            StudentsAdmin admin = new StudentsAdmin();
+
+            // Register the user, enroll the user, and import the new identity into the wallet.
+            RegistrationRequest registrationRequest = new RegistrationRequest(this.name);
+            registrationRequest.setAffiliation("students.department1");
+            registrationRequest.setEnrollmentID(this.name);
+            String enrollmentSecret = caClient.register(registrationRequest, admin);
+            Enrollment enrollment = caClient.enroll(this.name, enrollmentSecret);
+            Identity user = Identities.newX509Identity("StudentsMSP", admin.getCert(), admin.getKey());
+            wallet.put(this.getFullName(), user);
+            System.out.println("Successfully enrolled user " + this.name + " and imported it into the wallet");
+
+        } catch (Exception e) {
+            System.err.println("Error registering user: " + this.name);
+            e.printStackTrace();
+        }
     }
 
     @Override
