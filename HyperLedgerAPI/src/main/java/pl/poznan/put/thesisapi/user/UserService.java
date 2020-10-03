@@ -56,9 +56,11 @@ public class UserService implements IUserService, UserDetailsService {
         return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
     }
 
-    public String loginUser(UserDto userDto) {
-        return "jwt";
-    }
+//    public Boolean loginUser(UserDto userDto) {
+//        UserEntity userEntity = userRepository.findByUsername(userDto.getName());
+//
+//        return userEntity != null && userDto.getPassword().equals(userEntity.getPassword());
+//    }
 
     public List<UserEntity> list() {
         return userRepository.findAll();

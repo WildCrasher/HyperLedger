@@ -1,7 +1,6 @@
 package pl.poznan.put.thesisapi.api;
 
 import com.google.gson.Gson;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,17 +39,18 @@ public class AuthController {
         return "Success";
     }
 
-    @PostMapping("/login")
-    public String loginUser(@RequestBody() UserDto userDto) {
-        String jwt = "";
-        try {
-            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-            jwt = userService.loginUser(userDto);
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
-        return jwt;
-    }
+//    @PostMapping("/login")
+//    public String loginUser(@RequestBody() UserDto userDto) {
+//        try {
+//            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+//            if(userService.loginUser(userDto)) {
+//
+//            }
+//        } catch (Exception ex) {
+//            return ex.getMessage();
+//        }
+//        return "jwt";
+//    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String testDb() {
