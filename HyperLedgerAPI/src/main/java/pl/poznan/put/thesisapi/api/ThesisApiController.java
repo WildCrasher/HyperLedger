@@ -38,20 +38,14 @@ public class ThesisApiController {
 
     @PostMapping()
     public String addThesis(@RequestBody() Thesis thesis, @RequestHeader Map<String, String> headers) {
-        String token = headers.get(HEADER_STRING.toLowerCase());
-
-        String username = userService.getUsernameFromJWTToken(token);
-
-        UserEntity userEntity = userService.getUserEntityByUsername(username);
-
-        User user = new Student(username);
+        User user = this.getUserFromHeaders(headers);
         this.thesisRepository.save(thesis, user);
         return new Gson().toJson("ok");
     }
 
     @PostMapping("/assign")
-    public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body) throws Exception {
-        User user = new Student("Uzytkownik2");
+    public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
+        User user = this.getUserFromHeaders(headers);
         boolean result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user);
         if(!result) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -60,8 +54,8 @@ public class ThesisApiController {
     }
 
     @PostMapping("/approve")
-    public ResponseEntity approveThesis(@RequestBody() String thesisNumber) {
-        User user = new Student("Uzytkownik2");
+    public ResponseEntity approveThesis(@RequestBody() String thesisNumber, @RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
         boolean result = this.thesisRepository.approveThesis(thesisNumber, user);
         if(!result) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -70,14 +64,21 @@ public class ThesisApiController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getThesis(@PathVariable(value = "id") String id) {
-        User user = new Student("Uzytkownik2");
+    public String getThesis(@PathVariable(value = "id") String id, @RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
         return new Gson().toJson(this.thesisRepository.getById(id, user));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getAllThesis() {
-        User user = new Student("Uzytkownik2");
+    public String getAllThesis(@RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
         return new Gson().toJson(this.thesisRepository.getAll(user));
+    }
+
+    private User getUserFromHeaders(final Map<String, String> headers) {
+        String token = headers.get(HEADER_STRING.toLowerCase());
+        String username = userService.getUsernameFromJWTToken(token);
+        UserEntity userEntity = userService.getUserEntityByUsername(username);
+        return userEntity.convertToUser();
     }
 }
