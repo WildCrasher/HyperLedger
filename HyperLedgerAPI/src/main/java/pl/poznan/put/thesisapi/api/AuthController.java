@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+
+import static pl.poznan.put.thesisapi.security.SecurityConstants.HEADER_STRING;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController()
@@ -38,6 +41,13 @@ public class AuthController {
             return uaeEx.getMessage();
         }
         return new Gson().toJson("success");
+    }
+
+    @PostMapping("/logout")
+    public String logout(@RequestBody String token, @RequestHeader Map<String, String> headers) {
+
+        String username = userService.getUsernameFromJWTToken(token);
+        return new Gson().toJson("Logging out to implement");
     }
 
 //    @PostMapping("/login")

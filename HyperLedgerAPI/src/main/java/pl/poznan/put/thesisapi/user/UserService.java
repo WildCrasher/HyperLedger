@@ -1,5 +1,7 @@
 package pl.poznan.put.thesisapi.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,8 @@ import pl.poznan.put.thesisapi.exceptions.UserAlreadyExistException;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
+import static pl.poznan.put.thesisapi.security.SecurityConstants.SECRET;
+import static pl.poznan.put.thesisapi.security.SecurityConstants.TOKEN_PREFIX;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
@@ -56,11 +60,20 @@ public class UserService implements IUserService, UserDetailsService {
         return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
     }
 
-//    public Boolean loginUser(UserDto userDto) {
-//        UserEntity userEntity = userRepository.findByUsername(userDto.getName());
-//
-//        return userEntity != null && userDto.getPassword().equals(userEntity.getPassword());
-//    }
+    public UserEntity getUserEntityByUsername(String username) throws UsernameNotFoundException {
+        UserEntity applicationUser = userRepository.findByUsername(username);
+        if (applicationUser == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return applicationUser;
+    }
+
+    public String getUsernameFromJWTToken(String token) {
+        return JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                .build()
+                .verify(token.replace(TOKEN_PREFIX, ""))
+                .getSubject();
+    }
 
     public List<UserEntity> list() {
         return userRepository.findAll();
