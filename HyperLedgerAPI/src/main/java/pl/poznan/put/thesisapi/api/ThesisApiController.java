@@ -1,8 +1,11 @@
 package pl.poznan.put.thesisapi.api;
 
 import com.google.gson.Gson;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.poznan.put.thesisapi.entities.AssignStudentDto;
 import pl.poznan.put.thesisapi.thesis.Thesis;
 import pl.poznan.put.thesisapi.thesis.ThesisRepository;
 import pl.poznan.put.thesisapi.user.Student;
@@ -31,6 +34,26 @@ public class ThesisApiController {
         User user = new Student("Uzytkownik2");
         this.thesisRepository.save(thesis, user);
         return new Gson().toJson("ok");
+    }
+
+    @PostMapping("/assign")
+    public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body) throws Exception {
+        User user = new Student("Uzytkownik2");
+        boolean result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user);
+        if(!result) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(new Gson().toJson("ok"));
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity approveThesis(@RequestBody() String thesisNumber) {
+        User user = new Student("Uzytkownik2");
+        boolean result = this.thesisRepository.approveThesis(thesisNumber, user);
+        if(!result) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(new Gson().toJson("ok"));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

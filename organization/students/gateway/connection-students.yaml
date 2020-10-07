@@ -1,0 +1,63 @@
+---
+name: test-network-students
+version: 1.0.0
+client:
+  organization: Students
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  Students:
+    mspid: StudentsMSP
+    peers:
+    - peer0.students.put.poznan.pl
+    certificateAuthorities:
+    - ca.students.put.poznan.pl
+peers:
+  peer0.students.put.poznan.pl:
+    url: grpcs://localhost:9051
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUBIPq+ANSH1EFKyH9MG4W+cBoCyAwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIwMTAwNzEzMDUwMFoXDTM1MTAwNDEzMDUwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEXdyhkpfVvZCVMVt2/eFKDwX6
+          cDF2ulaCI45OSvrlZtw+fTn549VmmXt7GilMI1f2wrgBMS2tTem/M6b99HUyf6NF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FLZVu8hsGjTLqb60nbjWWeXlqWm4MAoGCCqGSM49BAMCA0cAMEQCIGwiffKEa3Fx
+          09fS+ailywbVXbkZTTYtJNFKnCyShOLbAiBF3817yx6xbjKKzwbCxp4nEQEOeKF1
+          0Cp6sMDtrwQNBA==
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.students.put.poznan.pl
+      hostnameOverride: peer0.students.put.poznan.pl
+certificateAuthorities:
+  ca.students.put.poznan.pl:
+    url: https://localhost:8054
+    caName: ca-students
+    tlsCACerts:
+      pem: 
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUBIPq+ANSH1EFKyH9MG4W+cBoCyAwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIwMTAwNzEzMDUwMFoXDTM1MTAwNDEzMDUwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEXdyhkpfVvZCVMVt2/eFKDwX6
+          cDF2ulaCI45OSvrlZtw+fTn549VmmXt7GilMI1f2wrgBMS2tTem/M6b99HUyf6NF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FLZVu8hsGjTLqb60nbjWWeXlqWm4MAoGCCqGSM49BAMCA0cAMEQCIGwiffKEa3Fx
+          09fS+ailywbVXbkZTTYtJNFKnCyShOLbAiBF3817yx6xbjKKzwbCxp4nEQEOeKF1
+          0Cp6sMDtrwQNBA==
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false

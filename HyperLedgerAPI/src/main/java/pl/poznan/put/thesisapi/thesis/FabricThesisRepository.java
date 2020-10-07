@@ -2,6 +2,8 @@ package pl.poznan.put.thesisapi.thesis;
 
 import org.hyperledger.fabric.gateway.*;
 import org.springframework.stereotype.Repository;
+import pl.poznan.put.thesisapi.user.Student;
+import pl.poznan.put.thesisapi.user.Supervisor;
 import pl.poznan.put.thesisapi.user.User;
 
 import java.io.IOException;
@@ -31,6 +33,49 @@ public class FabricThesisRepository implements ThesisRepository {
         } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean assignStudent(String thesisNumber, String student, User user) {
+        try(Gateway gateway = this.getGateway(user)) {
+
+            Network network = gateway.getNetwork("mychannel");
+
+            Contract contract = network.getContract("thesis");
+
+            byte[] response = contract.submitTransaction(
+                    "assignStudent",
+                    thesisNumber,
+                    student
+            );
+
+            System.out.println(response);
+        } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean approveThesis(String thesisNumber, User user) {
+        try(Gateway gateway = this.getGateway(user)) {
+
+            Network network = gateway.getNetwork("mychannel");
+
+            Contract contract = network.getContract("thesis");
+
+            byte[] response = contract.submitTransaction(
+                    "approveThesis",
+                    thesisNumber
+            );
+
+            System.out.println(response);
+        } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override

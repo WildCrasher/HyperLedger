@@ -66,17 +66,38 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public Thesis asignStudent(final ThesisContext ctx, final String thesisNumber, final String student) {
+    public Thesis assignStudent(final ThesisContext ctx, final String thesisNumber, final String student) {
 
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
-        if (!thesis.isFree()) {
+        if (!thesis.getStudent().equals("")) {
             throw new RuntimeException("Thesis " + thesisNumber + " is already asigned to " + thesis.getStudent());
         }
 
-        if (thesis.isFree()) {
+        if (thesis.getStudent().equals("")) {
             thesis.setStudent(student);
+        }
+
+        ctx.getThesisList().updateThesis(thesis);
+        return thesis;
+    }
+
+    @Transaction()
+    public Thesis approveThesis(final ThesisContext ctx, final String thesisNumber) {
+
+        String thesisKey = State.makeKey(new String[] {thesisNumber});
+        Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
+
+        if (thesis.getStudent().equals("")) {
+            throw new RuntimeException("Thesis " + thesisNumber + " have no student assigned");
+        }
+
+        if (thesis.isOwned()) {
+            throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
+        }
+
+        if (thesis.isFree()) {
             thesis.setOwned();
         }
 
