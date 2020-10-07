@@ -21,7 +21,7 @@ public class FabricThesisRepository implements ThesisRepository {
 
             byte[] response = contract.submitTransaction(
                     "issue",
-                    thesis.getSupervisor(),
+                    user.getName(),
                     thesis.getThesisNumber(),
                     thesis.getIssueDateTime(),
                     thesis.getTopic()

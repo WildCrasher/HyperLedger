@@ -71,11 +71,11 @@ public final class ThesisContract implements ContractInterface {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
-        if (!thesis.getStudent().equals("")) {
+        if (!thesis.getStudent().equals(" ")) {
             throw new RuntimeException("Thesis " + thesisNumber + " is already asigned to " + thesis.getStudent());
         }
 
-        if (thesis.getStudent().equals("")) {
+        if (thesis.getStudent().equals(" ")) {
             thesis.setStudent(student);
         }
 
@@ -89,7 +89,7 @@ public final class ThesisContract implements ContractInterface {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
-        if (thesis.getStudent().equals("")) {
+        if (thesis.getStudent().equals(" ")) {
             throw new RuntimeException("Thesis " + thesisNumber + " have no student assigned");
         }
 
