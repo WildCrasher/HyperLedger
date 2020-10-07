@@ -2,8 +2,6 @@ package pl.poznan.put.thesisapi.thesis;
 
 import org.hyperledger.fabric.gateway.*;
 import org.springframework.stereotype.Repository;
-import pl.poznan.put.thesisapi.user.Student;
-import pl.poznan.put.thesisapi.user.Supervisor;
 import pl.poznan.put.thesisapi.user.User;
 
 import java.io.IOException;
