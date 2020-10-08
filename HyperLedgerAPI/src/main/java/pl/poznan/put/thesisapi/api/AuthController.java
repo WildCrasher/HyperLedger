@@ -44,9 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public String logout(@RequestBody String token, @RequestHeader Map<String, String> headers) {
-
-        String username = userService.getUsernameFromJWTToken(token);
+    public String logout(@RequestHeader Map<String, String> headers) {
         return new Gson().toJson("Logging out to implement");
     }
 
