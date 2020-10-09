@@ -39,28 +39,28 @@ public class ThesisApiController {
     @PostMapping()
     public String addThesis(@RequestBody() Thesis thesis, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        this.thesisRepository.save(thesis, user);
-        return new Gson().toJson("ok");
+        String result = this.thesisRepository.save(thesis, user);
+        return new Gson().toJson(result);
     }
 
     @PostMapping("/assign")
     public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
         User user = this.getUserFromHeaders(headers);
-        boolean result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user);
-        if(!result) {
+        String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user);
+        if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.ok(new Gson().toJson("ok"));
+        return ResponseEntity.ok(new Gson().toJson(result));
     }
 
     @PostMapping("/approve")
     public ResponseEntity approveThesis(@RequestBody() String thesisNumber, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        boolean result = this.thesisRepository.approveThesis(thesisNumber, user);
-        if(!result) {
+        String result = this.thesisRepository.approveThesis(thesisNumber, user);
+        if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.ok(new Gson().toJson("ok"));
+        return ResponseEntity.ok(new Gson().toJson(result));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -15,6 +15,7 @@ import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Info;
 import org.hyperledger.fabric.contract.annotation.Transaction;
 import org.hyperledger.fabric.shim.ChaincodeStub;
+import org.hyperledger.fabric.shim.ChaincodeException;
 
 @Contract(name = "pl.poznan.put.thesis", info = @Info(title = "Thesis contract", description = "", version = "0.0.1"))
 @Default
@@ -52,7 +53,9 @@ public final class ThesisContract implements ContractInterface {
     public Thesis issue(final ThesisContext ctx, final String supervisor, final String thesisNumber,
                         final String issueDateTime, final String topic) {
 
-        System.out.println(ctx);
+        if (!isUserInOrg(ctx, "supervisor")) {
+            throw new ChaincodeException("cannotPerformAction");
+        }
 
         Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", "Z", topic);
 
@@ -67,6 +70,10 @@ public final class ThesisContract implements ContractInterface {
 
     @Transaction()
     public Thesis assignStudent(final ThesisContext ctx, final String thesisNumber, final String student) {
+
+        if (!isUserInOrg(ctx, "student")) {
+            throw new ChaincodeException("cannotPerformAction");
+        }
 
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
@@ -85,6 +92,10 @@ public final class ThesisContract implements ContractInterface {
 
     @Transaction()
     public Thesis approveThesis(final ThesisContext ctx, final String thesisNumber) {
+
+        if (!isUserInOrg(ctx, "supervisor")) {
+            throw new ChaincodeException("cannotPerformAction");
+        }
 
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
@@ -125,5 +136,14 @@ public final class ThesisContract implements ContractInterface {
         }
 
         return new Gson().toJson(thesis);
+    }
+
+    private Boolean isUserInOrg(final Context ctx, final String org) {
+        String userMSPID = ctx.getClientIdentity().getMSPID().toLowerCase();
+        if (userMSPID.contains(org)) {
+            return true;
+        }
+
+        return false;
     }
 }

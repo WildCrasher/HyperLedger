@@ -406,6 +406,7 @@ function checkSystem() {
 # Tear down running network
 function networkDown() {
   # stop org3 containers also in addition to supervisors and students, in case we were running sample to add org3
+  docker network disconnect -f net_thesis logspout
   docker-compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
   # docker-compose -f $COMPOSE_FILE_COUCH_ORG3 -f $COMPOSE_FILE_ORG3 down --volumes --remove-orphans
   # Don't remove the generated artifacts -- note, the ledgers are always removed
