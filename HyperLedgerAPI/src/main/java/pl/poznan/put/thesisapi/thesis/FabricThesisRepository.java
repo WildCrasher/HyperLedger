@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 @Repository
 public class FabricThesisRepository implements ThesisRepository {
     @Override
-    public void save(final Thesis thesis, final User user) {
+    public String save(final Thesis thesis, final User user) {
         try(Gateway gateway = this.getGateway(user)) {
 
             Network network = gateway.getNetwork("mychannel");
@@ -28,13 +28,18 @@ public class FabricThesisRepository implements ThesisRepository {
             );
 
             System.out.println(response);
-        } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
+        } catch (RuntimeException | GatewayException | IOException | TimeoutException | InterruptedException e) {
+            if(e.getMessage().contains("cannotPerformAction")) {
+                return "cannotPerformAction";
+            }
             e.printStackTrace();
+            return "error";
         }
+        return "success";
     }
 
     @Override
-    public boolean assignStudent(String thesisNumber, String student, User user) {
+    public String assignStudent(String thesisNumber, String student, User user) {
         try(Gateway gateway = this.getGateway(user)) {
 
             Network network = gateway.getNetwork("mychannel");
@@ -48,15 +53,18 @@ public class FabricThesisRepository implements ThesisRepository {
             );
 
             System.out.println(response);
-        } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
+        } catch (RuntimeException | GatewayException | IOException | TimeoutException | InterruptedException e) {
+            if(e.getMessage().contains("cannotPerformAction")) {
+                return "cannotPerformAction";
+            }
             e.printStackTrace();
-            return false;
+            return "error";
         }
-        return true;
+        return "success";
     }
 
     @Override
-    public boolean approveThesis(String thesisNumber, User user) {
+    public String approveThesis(String thesisNumber, User user) {
         try(Gateway gateway = this.getGateway(user)) {
 
             Network network = gateway.getNetwork("mychannel");
@@ -69,11 +77,14 @@ public class FabricThesisRepository implements ThesisRepository {
             );
 
             System.out.println(response);
-        } catch (GatewayException | IOException | TimeoutException | InterruptedException e) {
+        } catch (RuntimeException | GatewayException | IOException | TimeoutException | InterruptedException e) {
+            if(e.getMessage().contains("cannotPerformAction")) {
+                return "cannotPerformAction";
+            }
             e.printStackTrace();
-            return false;
+            return "error";
         }
-        return true;
+        return "success";
     }
 
     @Override
