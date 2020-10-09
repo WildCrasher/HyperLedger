@@ -52,13 +52,9 @@ public final class ThesisContract implements ContractInterface {
     public Thesis issue(final ThesisContext ctx, final String supervisor, final String thesisNumber,
                         final String issueDateTime, final String topic) {
 
-        System.out.println(ctx);
-
         Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", "Z", topic);
 
         thesis.setFree();
-
-        System.out.println(thesis);
 
         ctx.getThesisList().addThesis(thesis);
 
@@ -75,9 +71,7 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " is already asigned to " + thesis.getStudent());
         }
 
-        if (thesis.getStudent().equals(" ")) {
-            thesis.setStudent(student);
-        }
+        thesis.setStudent(student);
 
         ctx.getThesisList().updateThesis(thesis);
         return thesis;
@@ -88,7 +82,6 @@ public final class ThesisContract implements ContractInterface {
 
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
-
         if (thesis.getStudent().equals(" ")) {
             throw new RuntimeException("Thesis " + thesisNumber + " have no student assigned");
         }
@@ -100,7 +93,6 @@ public final class ThesisContract implements ContractInterface {
         if (thesis.isFree()) {
             thesis.setOwned();
         }
-
         ctx.getThesisList().updateThesis(thesis);
         return thesis;
     }

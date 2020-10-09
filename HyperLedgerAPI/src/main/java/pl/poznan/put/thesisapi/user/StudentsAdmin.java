@@ -18,10 +18,10 @@ import java.util.Set;
 public class StudentsAdmin implements User {
 
     private Wallet wallet = Wallets.newFileSystemWallet(Paths.get("wallet"));
-    private X509Identity identity = (X509Identity)wallet.get("admin@students.put.poznan.pl");
+    private X509Identity identity = (X509Identity)wallet.get("Admin@students.put.poznan.pl");
 
     public StudentsAdmin() throws IOException {
-        if (wallet.get("admin@students.put.poznan.pl") == null) {
+        if (wallet.get("Admin@students.put.poznan.pl") == null) {
             this.enroll();
         }
     }
@@ -38,7 +38,7 @@ public class StudentsAdmin implements User {
             caClient.setCryptoSuite(cryptoSuite);
 
             // Check to see if we've already enrolled the admin user.
-            if (wallet.get("admin@students.put.poznan.pl") != null) {
+            if (wallet.get("Admin@students.put.poznan.pl") != null) {
                 System.out.println("An identity for the admin user \"admin\" already exists in the wallet");
                 return;
             }
@@ -49,8 +49,8 @@ public class StudentsAdmin implements User {
             enrollmentRequestTLS.setProfile("tls");
             Enrollment enrollment = caClient.enroll("admin", "adminpw", enrollmentRequestTLS);
             Identity user = Identities.newX509Identity("StudentsMSP", enrollment);
-            wallet.put("admin@students.put.poznan.pl", user);
-            identity = (X509Identity)wallet.get("admin@students.put.poznan.pl");
+            wallet.put("Admin@students.put.poznan.pl", user);
+            identity = (X509Identity)wallet.get("Admin@students.put.poznan.pl");
             System.out.println("Successfully enrolled user \"admin\" and imported it into the wallet");
         } catch (Exception e) {
             System.err.println("Error adding to wallet");
