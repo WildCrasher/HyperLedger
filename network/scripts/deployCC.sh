@@ -38,6 +38,12 @@ elif [ "$CC_SRC_LANGUAGE" = "java" ]; then
 	popd
 	echo Finished compiling Java code
 
+  echo Running tests
+  pushd ../chaincode/thesis/organization/supervisors/contract
+  ./gradlew test
+  popd
+  echo Finished running tests
+
 elif [ "$CC_SRC_LANGUAGE" = "typescript" ]; then
 	CC_RUNTIME_LANGUAGE=node # chaincode runtime language is node.js
 	CC_SRC_PATH="../chaincode/fabcar/typescript/"
