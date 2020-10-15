@@ -1,6 +1,5 @@
 package pl.poznan.put;
 
-import com.google.gson.Gson;
 import org.hyperledger.fabric.contract.ClientIdentity;
 import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
@@ -10,20 +9,20 @@ import org.junit.jupiter.api.Test;
 import pl.poznan.put.ledgerapi.State;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 public final class ThesisContractTest {
-    
     private ThesisContract contract;
     private ThesisContext ctx;
     private ChaincodeStub stub;
     private ClientIdentity clientIdentity;
-    
+
     @BeforeEach
     public void beforeEach() {
         this.contract = new ThesisContract();
