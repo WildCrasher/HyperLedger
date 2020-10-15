@@ -1,7 +1,3 @@
-/*
-SPDX-License-Identifier: Apache-2.0
-*/
-
 package pl.poznan.put;
 
 import pl.poznan.put.ledgerapi.State;
