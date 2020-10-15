@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.poznan.put.thesisapi.entities.ApproveThesisDto;
 import pl.poznan.put.thesisapi.entities.AssignStudentDto;
 import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.thesis.Thesis;
@@ -54,9 +55,9 @@ public class ThesisApiController {
     }
 
     @PostMapping("/approve")
-    public ResponseEntity approveThesis(@RequestBody() String thesisNumber, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity approveThesis(@RequestBody() ApproveThesisDto body, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.approveThesis(thesisNumber, user);
+        String result = this.thesisRepository.approveThesis(body.getThesisNumber(), user);
         if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

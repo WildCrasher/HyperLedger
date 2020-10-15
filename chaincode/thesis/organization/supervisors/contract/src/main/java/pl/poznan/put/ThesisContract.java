@@ -57,11 +57,7 @@ public final class ThesisContract implements ContractInterface {
             throw new ChaincodeException("cannotPerformAction");
         }
 
-        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", "Z", topic);
-
-        thesis.setFree();
-
-        System.out.println(thesis);
+        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", Thesis.FREE, topic);
 
         ctx.getThesisList().addThesis(thesis);
 
@@ -79,12 +75,10 @@ public final class ThesisContract implements ContractInterface {
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
         if (!thesis.getStudent().equals(" ")) {
-            throw new RuntimeException("Thesis " + thesisNumber + " is already asigned to " + thesis.getStudent());
+            throw new RuntimeException("Thesis " + thesisNumber + " is already assigned to " + thesis.getStudent());
         }
 
-        if (thesis.getStudent().equals(" ")) {
-            thesis.setStudent(student);
-        }
+        thesis.setStudent(student);
 
         ctx.getThesisList().updateThesis(thesis);
         return thesis;

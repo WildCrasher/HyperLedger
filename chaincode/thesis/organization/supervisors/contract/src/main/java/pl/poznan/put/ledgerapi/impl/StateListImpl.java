@@ -9,8 +9,6 @@ import pl.poznan.put.ledgerapi.State;
 import pl.poznan.put.ledgerapi.StateDeserializer;
 import pl.poznan.put.ledgerapi.StateList;
 import org.hyperledger.fabric.contract.Context;
-import org.hyperledger.fabric.shim.ChaincodeStub;
-import org.hyperledger.fabric.shim.ledger.CompositeKey;
 
 /*
 SPDX-License-Identifier: Apache-2.0
@@ -48,11 +46,6 @@ public class StateListImpl implements StateList {
      */
     @Override
     public StateList addState(final State state) {
-        ChaincodeStub stub = this.ctx.getStub();
-//        String[] splitKey = state.getSplitKey();
-//
-//        CompositeKey ledgerKey = stub.createCompositeKey(this.name, splitKey);
-
         byte[] data = State.serialize(state);
         this.ctx.getStub().putState(state.getKey(), data);
 
@@ -66,9 +59,6 @@ public class StateListImpl implements StateList {
      */
     @Override
     public State getState(final String key) {
-
-//        CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, State.splitKey(key));
-
         byte[] data = this.ctx.getStub().getState(key);
         if (data != null) {
             State state = this.deserializer.deserialize(data);
@@ -104,9 +94,8 @@ public class StateListImpl implements StateList {
      */
     @Override
     public StateList updateState(final State state) {
-        CompositeKey ledgerKey = this.ctx.getStub().createCompositeKey(this.name, state.getSplitKey());
         byte[] data = State.serialize(state);
-        this.ctx.getStub().putState(ledgerKey.toString(), data);
+        this.ctx.getStub().putState(state.getKey(), data);
 
         return this;
     }

@@ -162,5 +162,18 @@ public final class Thesis extends State {
                 .setIssueDateTime(issueDateTime).setStudent(student).setState(state).setTopic(topic);
     }
 
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(this.getClass() != o.getClass()) return false;
+
+        Thesis thesis = (Thesis) o;
+        return this.getSupervisor().equals(thesis.getSupervisor())
+                && this.getStudent().equals(thesis.getStudent())
+                && this.getIssueDateTime().equals(thesis.getIssueDateTime())
+                && this.getState().equals(thesis.getState())
+                && this.getThesisNumber().equals(thesis.getThesisNumber())
+                && this.getTopic().equals(thesis.getTopic())
+                && this.getKey().equals(thesis.getKey());
+    }
 
 }
