@@ -63,6 +63,16 @@ public class ThesisApiController {
         return ResponseEntity.ok(new Gson().toJson(result));
     }
 
+    @PostMapping("/revoke")
+    public ResponseEntity revokeThesis(@RequestBody() String thesisNumber, @RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
+        String result = this.thesisRepository.revokeThesis(thesisNumber, user);
+        if(result.equals("error")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(new Gson().toJson(result));
+    }
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getThesis(@PathVariable(value = "id") String id, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);

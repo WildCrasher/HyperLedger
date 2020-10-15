@@ -119,6 +119,13 @@ public final class Thesis extends State {
         return this;
     }
 
+    public Boolean isStudentAssigned(final String username) {
+        if (username.equals(this.getStudent())) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Thesis::" + this.getKey() + "   " + this.getThesisNumber() + " " + getSupervisor() + " "

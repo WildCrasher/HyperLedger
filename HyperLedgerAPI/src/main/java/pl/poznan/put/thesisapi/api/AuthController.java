@@ -8,13 +8,9 @@ import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.exceptions.UserAlreadyExistException;
 import pl.poznan.put.thesisapi.entities.UserDto;
 import pl.poznan.put.thesisapi.user.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
-
-import static pl.poznan.put.thesisapi.security.SecurityConstants.HEADER_STRING;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController()
@@ -42,24 +38,6 @@ public class AuthController {
         }
         return new Gson().toJson("success");
     }
-
-    @PostMapping("/logout")
-    public String logout(@RequestHeader Map<String, String> headers) {
-        return new Gson().toJson("Logging out to implement");
-    }
-
-//    @PostMapping("/login")
-//    public String loginUser(@RequestBody() UserDto userDto) {
-//        try {
-//            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-//            if(userService.loginUser(userDto)) {
-//
-//            }
-//        } catch (Exception ex) {
-//            return ex.getMessage();
-//        }
-//        return "jwt";
-//    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String testDb() {
