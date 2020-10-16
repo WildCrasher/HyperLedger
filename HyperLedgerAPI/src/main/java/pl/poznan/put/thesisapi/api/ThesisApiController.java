@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.poznan.put.thesisapi.entities.ApproveThesisDto;
 import pl.poznan.put.thesisapi.entities.AssignStudentDto;
+import pl.poznan.put.thesisapi.entities.RevokeThesisDto;
 import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.thesis.Thesis;
 import pl.poznan.put.thesisapi.thesis.ThesisRepository;
@@ -65,9 +66,9 @@ public class ThesisApiController {
     }
 
     @PostMapping("/revoke")
-    public ResponseEntity revokeThesis(@RequestBody() String thesisNumber, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity revokeThesis(@RequestBody() RevokeThesisDto body, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.revokeThesis(thesisNumber, user);
+        String result = this.thesisRepository.revokeThesis(body.getThesisNumber(), user);
         if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
