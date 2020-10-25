@@ -258,22 +258,26 @@ public final class ThesisContractTest {
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setFree()
                     .setSupervisor("Promotor")
                     .setIssueDateTime(date)
                     .setTopic("Temat")
-                    .setStudent("Student")
-                    .setKey();
+                    .setStudent(" ")
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
 
             byte[] data = State.serialize(thesis);
 
             when(stub.getState("A001")).thenReturn(data);
 
-            contract.approveThesis(ctx, "A001");
+            contract.approveThesis(ctx, "A001", "Student");
 
             thesis.setOwned();
+            thesis.setStudent("Student");
 
             byte[] data2 = State.serialize(thesis);
 
@@ -281,12 +285,12 @@ public final class ThesisContractTest {
         }
 
         @Test
-        public void studentCantAssign() {
+        public void studentCantApprove() {
             when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
 
             ChaincodeException ex = assertThrows(
                     ChaincodeException.class,
-                    () -> contract.approveThesis(ctx, "A001")
+                    () -> contract.approveThesis(ctx, "A001", "Student")
             );
 
             assertEquals("cannotPerformAction", ex.getMessage());
@@ -312,10 +316,10 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.approveThesis(ctx, "A001")
+                    () -> contract.approveThesis(ctx, "A001", "Student")
             );
 
-            assertEquals("Thesis A001 have no student assigned", ex.getMessage());
+            assertEquals("Student Student is not assigned to thesis A001", ex.getMessage());
         }
 
         @Test
@@ -323,6 +327,8 @@ public final class ThesisContractTest {
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student1", 3, date));
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setOwned()
@@ -330,7 +336,8 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent("Student")
-                    .setKey();
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
 
             byte[] data = State.serialize(thesis);
 
@@ -338,7 +345,7 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.approveThesis(ctx, "A001")
+                    () -> contract.approveThesis(ctx, "A001", "Student1")
             );
 
             assertEquals("Thesis A001 is already approved", ex.getMessage());

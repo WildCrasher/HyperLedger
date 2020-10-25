@@ -1,7 +1,5 @@
 package pl.poznan.put.thesisapi.api;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,8 +11,6 @@ import pl.poznan.put.thesisapi.entities.RevokeThesisDto;
 import pl.poznan.put.thesisapi.entities.UserEntity;
 import pl.poznan.put.thesisapi.thesis.Thesis;
 import pl.poznan.put.thesisapi.thesis.ThesisRepository;
-import pl.poznan.put.thesisapi.user.Student;
-import pl.poznan.put.thesisapi.user.Supervisor;
 import pl.poznan.put.thesisapi.user.User;
 import pl.poznan.put.thesisapi.user.UserService;
 
@@ -48,7 +44,7 @@ public class ThesisApiController {
     @PostMapping("/assign")
     public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user, body.getPriority());
+        String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), body.getPriority(), user);
         if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -58,7 +54,7 @@ public class ThesisApiController {
     @PostMapping("/approve")
     public ResponseEntity approveThesis(@RequestBody() ApproveThesisDto body, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.approveThesis(body.getThesisNumber(), user);
+        String result = this.thesisRepository.approveThesis(body.getThesisNumber(), body.getStudent(), user);
         if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

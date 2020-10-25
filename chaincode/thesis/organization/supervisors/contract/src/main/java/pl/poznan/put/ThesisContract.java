@@ -90,7 +90,7 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public Thesis approveThesis(final ThesisContext ctx, final String thesisNumber) {
+    public Thesis approveThesis(final ThesisContext ctx, final String thesisNumber, final String student) {
 
         if (!isUserInOrg(ctx, "supervisor")) {
             throw new ChaincodeException("cannotPerformAction");
@@ -99,17 +99,16 @@ public final class ThesisContract implements ContractInterface {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
-        if (thesis.getStudent().equals(" ")) {
-            throw new RuntimeException("Thesis " + thesisNumber + " have no student assigned");
+        if (!thesis.isStudentInAssignments(student)) {
+            throw new RuntimeException("Student " + student + " is not assigned to thesis " + thesisNumber);
         }
 
         if (thesis.isOwned()) {
             throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
         }
 
-        if (thesis.isFree()) {
-            thesis.setOwned();
-        }
+        thesis.setStudent(student);
+        thesis.setOwned();
 
         ctx.getThesisList().updateThesis(thesis);
         return thesis;
