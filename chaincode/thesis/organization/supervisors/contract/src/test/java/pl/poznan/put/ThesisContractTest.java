@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import pl.poznan.put.ledgerapi.State;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -68,7 +68,7 @@ public final class ThesisContractTest {
                     () -> contract.issue(ctx, "Promotor", "A001", date, "Temat")
             );
 
-            assertTrue(ex.getMessage().equals("cannotPerformAction"));
+            assertEquals("cannotPerformAction", ex.getMessage());
 
         }
     }
@@ -78,6 +78,8 @@ public final class ThesisContractTest {
         @Test
         public void getThesis() {
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setFree()
@@ -85,14 +87,15 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent(" ")
-                    .setKey();
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
 
             byte[] data = State.serialize(thesis);
 
             when(stub.getState("A001")).thenReturn(data);
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
-            assertTrue(contract.queryThesis(ctx, "A001").equals(thesis));
+            assertEquals(contract.queryThesis(ctx, "A001"), thesis);
         }
 
         @Test
@@ -105,7 +108,7 @@ public final class ThesisContractTest {
                     () -> contract.queryThesis(ctx, "A001")
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 not found"));
+            assertEquals("Thesis A001 not found", ex.getMessage());
         }
     }
 
@@ -129,9 +132,11 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
-            contract.assignStudent(ctx, "A001", "Student");
+            int priority = 3;
+            contract.assignStudent(ctx, "A001", "Student", priority);
 
-            thesis.setStudent("Student");
+            StudentAssignment assignment = new StudentAssignment("Student", priority, date);
+            thesis.addStudentAssignment(assignment);
 
             byte[] data2 = State.serialize(thesis);
 
@@ -142,12 +147,13 @@ public final class ThesisContractTest {
         public void supervisorCantAssign() {
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
+            int priority = 2;
             ChaincodeException ex = assertThrows(
                     ChaincodeException.class,
-                    () -> contract.assignStudent(ctx, "A001", "Student")
+                    () -> contract.assignStudent(ctx, "A001", "Student", priority)
             );
 
-            assertTrue(ex.getMessage().equals("cannotPerformAction"));
+            assertEquals("cannotPerformAction", ex.getMessage());
 
         }
 
@@ -169,12 +175,43 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
+            int priority = 2;
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.assignStudent(ctx, "A001", "Student")
+                    () -> contract.assignStudent(ctx, "A001", "Student", priority)
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 is already assigned to Student1"));
+            assertEquals("Thesis A001 is already assigned to Student1", ex.getMessage());
+        }
+
+        @Test
+        public void alreadyInAssignments() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student1", 3, date));
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            int priority = 2;
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.assignStudent(ctx, "A001", "Student1", priority)
+            );
+
+            assertEquals("Thesis A001 is already assigned to Student1", ex.getMessage());
         }
     }
 
@@ -217,7 +254,7 @@ public final class ThesisContractTest {
                     () -> contract.approveThesis(ctx, "A001")
             );
 
-            assertTrue(ex.getMessage().equals("cannotPerformAction"));
+            assertEquals("cannotPerformAction", ex.getMessage());
         }
 
         @Test
@@ -243,7 +280,7 @@ public final class ThesisContractTest {
                     () -> contract.approveThesis(ctx, "A001")
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 have no student assigned"));
+            assertEquals("Thesis A001 have no student assigned", ex.getMessage());
         }
 
         @Test
@@ -269,7 +306,7 @@ public final class ThesisContractTest {
                     () -> contract.approveThesis(ctx, "A001")
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 is already approved"));
+            assertEquals("Thesis A001 is already approved", ex.getMessage());
         }
     }
 
@@ -311,7 +348,7 @@ public final class ThesisContractTest {
                     () -> contract.revokeThesis(ctx, "A001", "Student")
             );
 
-            assertTrue(ex.getMessage().equals("cannotPerformAction"));
+            assertEquals("cannotPerformAction", ex.getMessage());
         }
 
         @Test
@@ -337,7 +374,7 @@ public final class ThesisContractTest {
                     () -> contract.revokeThesis(ctx, "A001", "Student")
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 is already approved"));
+            assertEquals("Thesis A001 is already approved", ex.getMessage());
         }
 
         @Test
@@ -363,7 +400,7 @@ public final class ThesisContractTest {
                     () -> contract.revokeThesis(ctx, "A001", "Student")
             );
 
-            assertTrue(ex.getMessage().equals("Thesis A001 you are not assigned"));
+            assertEquals("Thesis A001 you are not assigned", ex.getMessage());
         }
     }
 }

@@ -48,7 +48,7 @@ public class ThesisApiController {
     @PostMapping("/assign")
     public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user);
+        String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), user, body.getPriority());
         if(result.equals("error")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

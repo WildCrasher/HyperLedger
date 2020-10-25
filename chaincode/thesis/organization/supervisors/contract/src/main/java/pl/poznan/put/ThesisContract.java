@@ -3,7 +3,9 @@ SPDX-License-Identifier: Apache-2.0
 */
 package pl.poznan.put;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
@@ -40,16 +42,6 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public void initLedger(final ThesisContext ctx) {
-        Thesis thesis1 = Thesis.createInstance("Promotor1", "1", "2020-09-18",
-                "", Thesis.FREE, "temat1");
-        Thesis thesis2 = Thesis.createInstance("Promotor2", "2", "2020-09-18",
-                "student1", Thesis.OWNED, "temat2");
-        ctx.getThesisList().addThesis(thesis1);
-    }
-
-
-    @Transaction()
     public Thesis issue(final ThesisContext ctx, final String supervisor, final String thesisNumber,
                         final String issueDateTime, final String topic) {
 
@@ -57,7 +49,9 @@ public final class ThesisContract implements ContractInterface {
             throw new ChaincodeException("cannotPerformAction");
         }
 
-        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", Thesis.FREE, topic);
+        ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+        Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", Thesis.FREE, topic,
+                studentAssignments);
 
         ctx.getThesisList().addThesis(thesis);
 
@@ -65,7 +59,8 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public Thesis assignStudent(final ThesisContext ctx, final String thesisNumber, final String student) {
+    public Thesis assignStudent(final ThesisContext ctx, final String thesisNumber, final String student,
+                                final int priority) {
 
         if (!isUserInOrg(ctx, "student")) {
             throw new ChaincodeException("cannotPerformAction");
@@ -78,7 +73,13 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " is already assigned to " + thesis.getStudent());
         }
 
-        thesis.setStudent(student);
+        if(thesis.isStudentInAssignments(student)) {
+            throw new RuntimeException("Thesis " + thesisNumber + " is already assigned to " + student);
+        }
+
+        String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+        StudentAssignment assignment = new StudentAssignment(student, priority, date);
+        thesis.addStudentAssignment(assignment);
 
         ctx.getThesisList().updateThesis(thesis);
         return thesis;

@@ -4,7 +4,7 @@ public class AssignStudentDto {
 
     private String student;
     private String thesisNumber;
-
+    private int priority;
 
     public String getThesisNumber() {
         return thesisNumber;
@@ -20,5 +20,13 @@ public class AssignStudentDto {
 
     public void setStudent(String student) {
         this.student = student;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }
