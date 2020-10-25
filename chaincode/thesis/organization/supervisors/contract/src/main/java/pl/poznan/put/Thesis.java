@@ -194,6 +194,10 @@ public final class Thesis extends State {
         this.studentsAssigned.add(studentAssignment);
     }
 
+    public void removeStudentAssignment(final String studentName) {
+        this.studentsAssigned.removeIf(obj -> obj.getStudentName().equals(studentName));
+    }
+
     public boolean isStudentInAssignments(final String name) {
         return this.getStudentsAssigned().stream().anyMatch(o -> o.getStudentName().equals(name));
     }

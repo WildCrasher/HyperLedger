@@ -359,6 +359,8 @@ public final class ThesisContractTest {
             when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setFree()
@@ -366,7 +368,8 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent("Student")
-                    .setKey();
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
 
             byte[] data = State.serialize(thesis);
 
@@ -374,7 +377,8 @@ public final class ThesisContractTest {
 
             contract.revokeThesis(ctx, "A001", "Student");
 
-            thesis.setStudent(" ");
+            studentAssignments = new ArrayList<>();
+            thesis.setStudentsAssigned(studentAssignments);
 
             byte[] data2 = State.serialize(thesis);
 

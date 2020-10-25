@@ -128,9 +128,8 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
         }
 
-        if (thesis.isStudentAssigned(username)) {
-            thesis.setFree();
-            thesis.setStudent(" ");
+        if (thesis.isStudentInAssignments(username)) {
+            thesis.removeStudentAssignment(username);
         } else {
             throw new RuntimeException("Thesis " + thesisNumber + " you are not assigned");
         }
