@@ -77,6 +77,10 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " is already assigned to " + student);
         }
 
+        if(!(priority > 0 && priority < 4)) {
+            throw new RuntimeException("Wrong priority");
+        }
+
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
         StudentAssignment assignment = new StudentAssignment(student, priority, date);
         thesis.addStudentAssignment(assignment);

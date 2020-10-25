@@ -213,6 +213,41 @@ public final class ThesisContractTest {
 
             assertEquals("Thesis A001 is already assigned to Student1", ex.getMessage());
         }
+
+        @Test
+        public void wrongPriority() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            int priority = 7;
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.assignStudent(ctx, "A001", "Student1", priority)
+            );
+
+            assertEquals("Wrong priority", ex.getMessage());
+
+            int priority2 = -1;
+            ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.assignStudent(ctx, "A001", "Student1", priority2)
+            );
+
+            assertEquals("Wrong priority", ex.getMessage());
+        }
     }
 
     @Nested
