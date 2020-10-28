@@ -513,4 +513,140 @@ public final class ThesisContractTest {
             assertEquals("Thesis A001 you are not assigned", ex.getMessage());
         }
     }
+    @Nested
+    class AcceptAssignment {
+        @Test
+        public void accepts() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            try {
+                contract.acceptAssignment(ctx, "A001", "Student");
+            } catch (ParseException ignored) { }
+
+            thesis.setOwned();
+
+            byte[] data2 = State.serialize(thesis);
+
+            verify(stub).putState("A001", data2);
+        }
+
+        @Test
+        public void supervisorCantAccept() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            ChaincodeException ex = assertThrows(
+                    ChaincodeException.class,
+                    () -> contract.acceptAssignment(ctx, "A001", "Student")
+            );
+
+            assertEquals("cannotPerformAction", ex.getMessage());
+        }
+
+        @Test
+        public void alreadyAccepted() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setOwned()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.acceptAssignment(ctx, "A001", "Student")
+            );
+
+            assertEquals("Thesis A001 is already approved", ex.getMessage());
+        }
+
+        @Test
+        public void studentNotAssigned() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student2")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.acceptAssignment(ctx, "A001", "Student")
+            );
+
+            assertEquals("User Student is not assigned to thesis A001", ex.getMessage());
+        }
+
+        @Test
+        public void timeExpired() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student")
+                    .setAssignmentDate("10-10-2020 20:00:00")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.acceptAssignment(ctx, "A001", "Student")
+            );
+
+            assertEquals("Time to accept expired", ex.getMessage());
+        }
+    }
 }
