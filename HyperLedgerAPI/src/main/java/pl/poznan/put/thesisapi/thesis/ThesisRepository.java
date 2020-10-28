@@ -14,5 +14,6 @@ public interface ThesisRepository {
     String getById(final String id, final User user);
     String getAll(final User user);
     String acceptAssignment(final String thesisNumber, final User user);
+    String declineAssignment(final String thesisNumber, final User user);
 
 }

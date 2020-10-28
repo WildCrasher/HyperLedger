@@ -149,6 +149,33 @@ public final class ThesisContract implements ContractInterface {
         return thesis;
     }
 
+    @Transaction
+    public Thesis declineAssignment(final ThesisContext ctx, final String thesisNumber, final String username)
+            throws ParseException {
+        if (!isUserInOrg(ctx, "student")) {
+            throw new ChaincodeException("cannotPerformAction");
+        }
+
+        String thesisKey = State.makeKey(new String[] {thesisNumber});
+        Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
+
+        if (thesis.isOwned()) {
+            throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
+        }
+
+        if (!thesis.getStudent().equals(username)) {
+            throw new RuntimeException("User " + username + " is not assigned to thesis " + thesisNumber);
+        }
+
+        thesis.setStudent(" ");
+        thesis.setAssignmentDate("");
+        thesis.removeStudentAssignment(username);
+
+        ctx.getThesisList().updateThesis(thesis);
+
+        return thesis;
+    }
+
     @Transaction()
     public Thesis revokeThesis(final ThesisContext ctx, final String thesisNumber, final String username) {
 

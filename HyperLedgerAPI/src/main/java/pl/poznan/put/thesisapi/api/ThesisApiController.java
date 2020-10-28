@@ -80,6 +80,16 @@ public class ThesisApiController {
         return ResponseEntity.ok(gson.toJson(result));
     }
 
+    @PostMapping("/decline")
+    public ResponseEntity declineAssignment(@RequestBody() AcceptAssignmentDto body, @RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
+        String result = this.thesisRepository.declineAssignment(body.getThesisNumber(), user);
+        if(!result.equals("success")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(gson.toJson(result));
+        }
+        return ResponseEntity.ok(gson.toJson(result));
+    }
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getThesis(@PathVariable(value = "id") String id, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);

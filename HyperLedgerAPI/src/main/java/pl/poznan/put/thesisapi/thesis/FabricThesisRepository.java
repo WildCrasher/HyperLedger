@@ -178,6 +178,31 @@ public class FabricThesisRepository implements ThesisRepository {
         return "success";
     }
 
+    @Override
+    public String declineAssignment(String thesisNumber, User user) {
+        try(Gateway gateway = this.getGateway(user)) {
+
+            Network network = gateway.getNetwork("mychannel");
+
+            Contract contract = network.getContract("thesis");
+
+            byte[] response = contract.submitTransaction(
+                    "declineAssignment",
+                    thesisNumber,
+                    user.getName()
+            );
+
+            System.out.println(response);
+        } catch (RuntimeException | GatewayException | IOException | TimeoutException | InterruptedException e) {
+            if(e.getMessage().contains("cannotPerformAction")) {
+                return "cannotPerformAction";
+            }
+            e.printStackTrace();
+            return "error";
+        }
+        return "success";
+    }
+
     private Gateway getGateway(final User user) throws IOException {
         Gateway.Builder builder = Gateway.createBuilder();
 
