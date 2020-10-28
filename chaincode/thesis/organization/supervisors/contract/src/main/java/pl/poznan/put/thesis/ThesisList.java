@@ -1,4 +1,4 @@
-package pl.poznan.put;
+package pl.poznan.put.thesis;
 
 import pl.poznan.put.ledgerapi.State;
 import pl.poznan.put.ledgerapi.StateList;

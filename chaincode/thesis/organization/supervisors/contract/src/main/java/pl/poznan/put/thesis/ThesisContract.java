@@ -1,7 +1,7 @@
 /*
 SPDX-License-Identifier: Apache-2.0
 */
-package pl.poznan.put;
+package pl.poznan.put.thesis;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
+import pl.poznan.put.StudentAssignment;
 import pl.poznan.put.ledgerapi.State;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
@@ -20,6 +21,7 @@ import org.hyperledger.fabric.contract.annotation.Info;
 import org.hyperledger.fabric.contract.annotation.Transaction;
 import org.hyperledger.fabric.shim.ChaincodeStub;
 import org.hyperledger.fabric.shim.ChaincodeException;
+import pl.poznan.put.user.User;
 
 @Contract(name = "pl.poznan.put.thesis", info = @Info(title = "Thesis contract", description = "", version = "0.0.1"))
 @Default
@@ -71,6 +73,12 @@ public final class ThesisContract implements ContractInterface {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
+        String studentKey = State.makeKey(new String[] {student});
+        User user = ctx.getUserList().getUser(studentKey);
+        if(user == null) {
+            user = new User().setName(student).setKey();
+        }
+
         if (!thesis.getStudent().equals(" ")) {
             throw new RuntimeException("Thesis " + thesisNumber + " is already assigned to " + thesis.getStudent());
         }
@@ -87,7 +95,10 @@ public final class ThesisContract implements ContractInterface {
         StudentAssignment assignment = new StudentAssignment(student, priority, date);
         thesis.addStudentAssignment(assignment);
 
+        user.addThesisId(thesis.getThesisNumber());
+
         ctx.getThesisList().updateThesis(thesis);
+        ctx.getUserList().updateUser(user);
         return thesis;
     }
 
@@ -167,11 +178,18 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("User " + username + " is not assigned to thesis " + thesisNumber);
         }
 
+        String studentKey = State.makeKey(new String[] {username});
+        User user = ctx.getUserList().getUser(studentKey);
+
         thesis.setStudent(" ");
         thesis.setAssignmentDate("");
         thesis.removeStudentAssignment(username);
 
         ctx.getThesisList().updateThesis(thesis);
+
+        user.removeThesisId(thesisNumber);
+
+        ctx.getUserList().updateUser(user);
 
         return thesis;
     }
@@ -196,7 +214,15 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " you are not assigned");
         }
 
+        String studentKey = State.makeKey(new String[] {username});
+        User user = ctx.getUserList().getUser(studentKey);
+
         ctx.getThesisList().updateThesis(thesis);
+
+        user.removeThesisId(thesisNumber);
+
+        ctx.getUserList().updateUser(user);
+        
         return thesis;
     }
 

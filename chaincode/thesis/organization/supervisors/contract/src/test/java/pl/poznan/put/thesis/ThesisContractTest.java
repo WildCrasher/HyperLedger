@@ -1,4 +1,4 @@
-package pl.poznan.put;
+package pl.poznan.put.thesis;
 
 import org.hyperledger.fabric.contract.ClientIdentity;
 import org.hyperledger.fabric.shim.ChaincodeException;
@@ -6,7 +6,10 @@ import org.hyperledger.fabric.shim.ChaincodeStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import pl.poznan.put.StudentAssignment;
 import pl.poznan.put.ledgerapi.State;
+import pl.poznan.put.user.User;
+import pl.poznan.put.user.UserList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +36,7 @@ public final class ThesisContractTest {
         when(ctx.getStub()).thenReturn(stub);
         when(ctx.getClientIdentity()).thenReturn(clientIdentity);
         when(ctx.getThesisList()).thenReturn(new ThesisList(ctx));
+        when(ctx.getUserList()).thenReturn(new UserList(ctx));
     }
 
     @Nested
@@ -142,6 +146,13 @@ public final class ThesisContractTest {
             byte[] data2 = State.serialize(thesis);
 
             verify(stub).putState("A001", data2);
+
+            User user = new User().setName("Student").setKey();
+            user.addThesisId("A001");
+
+            byte[] userData = State.serialize(user);
+
+            verify(stub).putState("Student", userData);
         }
 
         @Test
@@ -439,6 +450,10 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
+            User user = new User().setName("Student").setKey().addThesisId("A001");
+            byte[] userData = State.serialize(user);
+            when(stub.getState("Student")).thenReturn(userData);
+
             contract.revokeThesis(ctx, "A001", "Student");
 
             studentAssignments = new ArrayList<>();
@@ -447,6 +462,10 @@ public final class ThesisContractTest {
             byte[] data2 = State.serialize(thesis);
 
             verify(stub).putState("A001", data2);
+
+            user.setThesesId(new ArrayList<>());
+            byte[] userData2 = State.serialize(user);
+            verify(stub).putState("Student", userData2);
         }
 
         @Test
@@ -673,6 +692,10 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
+            User user = new User().setName("Student").setKey().addThesisId("A001");
+            byte[] userData = State.serialize(user);
+            when(stub.getState("Student")).thenReturn(userData);
+
             try {
                 contract.declineAssignment(ctx, "A001", "Student");
             } catch (ParseException ignored) { }
@@ -684,6 +707,11 @@ public final class ThesisContractTest {
             byte[] data2 = State.serialize(thesis);
 
             verify(stub).putState("A001", data2);
+
+            user.setThesesId(new ArrayList<>());
+            byte[] userData2 = State.serialize(user);
+            verify(stub).putState("Student", userData2);
+
         }
 
         @Test

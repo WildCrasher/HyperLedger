@@ -2,11 +2,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package pl.poznan.put;
+package pl.poznan.put.thesis;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.gson.Gson;
+import pl.poznan.put.StudentAssignment;
 import pl.poznan.put.ledgerapi.State;
 import org.hyperledger.fabric.contract.annotation.DataType;
 import org.hyperledger.fabric.contract.annotation.Property;
