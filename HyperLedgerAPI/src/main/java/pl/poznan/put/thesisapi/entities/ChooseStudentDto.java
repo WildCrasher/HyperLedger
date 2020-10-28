@@ -1,6 +1,6 @@
 package pl.poznan.put.thesisapi.entities;
 
-public class ApproveThesisDto {
+public class ChooseStudentDto {
     private String thesisNumber;
     private String student;
 

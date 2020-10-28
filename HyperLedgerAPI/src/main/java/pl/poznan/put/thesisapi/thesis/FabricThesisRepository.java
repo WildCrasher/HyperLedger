@@ -65,7 +65,7 @@ public class FabricThesisRepository implements ThesisRepository {
     }
 
     @Override
-    public String approveThesis(String thesisNumber, String student, User user) {
+    public String chooseStudent(String thesisNumber, String student, User user) {
         try(Gateway gateway = this.getGateway(user)) {
 
             Network network = gateway.getNetwork("mychannel");
@@ -73,7 +73,7 @@ public class FabricThesisRepository implements ThesisRepository {
             Contract contract = network.getContract("thesis");
 
             byte[] response = contract.submitTransaction(
-                    "approveThesis",
+                    "chooseStudent",
                     thesisNumber,
                     student
             );

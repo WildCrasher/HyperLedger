@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import pl.poznan.put.ledgerapi.State;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -251,10 +252,10 @@ public final class ThesisContractTest {
     }
 
     @Nested
-    class Approve {
+    class ChooseStudent {
 
         @Test
-        public void approves() {
+        public void assigns() {
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
@@ -274,9 +275,10 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
-            contract.approveThesis(ctx, "A001", "Student");
+            try {
+                contract.chooseStudent(ctx, "A001", "Student");
+            } catch (ParseException ignored) { }
 
-            thesis.setOwned();
             thesis.setStudent("Student");
 
             byte[] data2 = State.serialize(thesis);
@@ -285,12 +287,45 @@ public final class ThesisContractTest {
         }
 
         @Test
-        public void studentCantApprove() {
+        public void assignsAfterTimeExpired() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student2")
+                    .setAssignmentDate("10-10-2020 20:00:00")
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            try {
+                contract.chooseStudent(ctx, "A001", "Student");
+            } catch (ParseException ignored) { }
+
+            thesis.setStudent("Student");
+
+            byte[] data2 = State.serialize(thesis);
+
+            verify(stub).putState("A001", data2);
+        }
+
+        @Test
+        public void studentCantAssign() {
             when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
 
             ChaincodeException ex = assertThrows(
                     ChaincodeException.class,
-                    () -> contract.approveThesis(ctx, "A001", "Student")
+                    () -> contract.chooseStudent(ctx, "A001", "Student")
             );
 
             assertEquals("cannotPerformAction", ex.getMessage());
@@ -316,7 +351,7 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.approveThesis(ctx, "A001", "Student")
+                    () -> contract.chooseStudent(ctx, "A001", "Student")
             );
 
             assertEquals("Student Student is not assigned to thesis A001", ex.getMessage());
@@ -345,10 +380,39 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.approveThesis(ctx, "A001", "Student1")
+                    () -> contract.chooseStudent(ctx, "A001", "Student1")
             );
 
             assertEquals("Thesis A001 is already approved", ex.getMessage());
+        }
+
+        @Test
+        public void alreadyAssigned() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent("Student2")
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.chooseStudent(ctx, "A001", "Student")
+            );
+
+            assertEquals("Thesis A001 is already assigned", ex.getMessage());
         }
     }
 

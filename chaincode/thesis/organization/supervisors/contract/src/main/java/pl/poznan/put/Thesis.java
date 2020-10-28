@@ -12,7 +12,11 @@ import org.hyperledger.fabric.contract.annotation.DataType;
 import org.hyperledger.fabric.contract.annotation.Property;
 import org.json.JSONPropertyIgnore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @DataType()
 public final class Thesis extends State {
@@ -68,6 +72,9 @@ public final class Thesis extends State {
     private String student;
 
     @Property()
+    private String assignmentDate;
+
+    @Property()
     private ArrayList<StudentAssignment> studentsAssigned = new ArrayList<>();
 
     public String getStudent() {
@@ -76,6 +83,8 @@ public final class Thesis extends State {
 
     public Thesis setStudent(final String newStudent) {
         this.student = newStudent;
+        String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+        this.setAssignmentDate(date);
         return this;
     }
 
@@ -174,7 +183,8 @@ public final class Thesis extends State {
                 && this.getThesisNumber().equals(thesis.getThesisNumber())
                 && this.getTopic().equals(thesis.getTopic())
                 && this.getKey().equals(thesis.getKey())
-                && this.getStudentsAssigned().equals(thesis.getStudentsAssigned());
+                && this.getStudentsAssigned().equals(thesis.getStudentsAssigned())
+                && this.getAssignmentDate().equals(thesis.getAssignmentDate());
     }
 
     public int hashCode() {
@@ -200,5 +210,23 @@ public final class Thesis extends State {
 
     public boolean isStudentInAssignments(final String name) {
         return this.getStudentsAssigned().stream().anyMatch(o -> o.getStudentName().equals(name));
+    }
+
+    public String getAssignmentDate() {
+        return assignmentDate;
+    }
+
+    public Thesis setAssignmentDate(final String newAssignmentDate) {
+        this.assignmentDate = newAssignmentDate;
+        return this;
+    }
+
+    public long getAssignmentDateDiff(final TimeUnit timeUnit) throws ParseException {
+        Date today = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date formattedAssignmentDate = formatter.parse(this.getAssignmentDate());
+        long diff = today.getTime() - formattedAssignmentDate.getTime();
+
+        return timeUnit.convert(diff, TimeUnit.MILLISECONDS);
     }
 }

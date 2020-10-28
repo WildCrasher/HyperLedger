@@ -3,9 +3,11 @@ SPDX-License-Identifier: Apache-2.0
 */
 package pl.poznan.put;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
@@ -90,7 +92,8 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public Thesis approveThesis(final ThesisContext ctx, final String thesisNumber, final String student) {
+    public Thesis chooseStudent(final ThesisContext ctx, final String thesisNumber, final String student)
+            throws ParseException {
 
         if (!isUserInOrg(ctx, "supervisor")) {
             throw new ChaincodeException("cannotPerformAction");
@@ -107,8 +110,11 @@ public final class ThesisContract implements ContractInterface {
             throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
         }
 
+        if (!thesis.getStudent().equals(" ") && thesis.getAssignmentDateDiff(TimeUnit.DAYS) < 14) {
+            throw new RuntimeException("Thesis " + thesisNumber + " is already assigned");
+        }
+
         thesis.setStudent(student);
-        thesis.setOwned();
 
         ctx.getThesisList().updateThesis(thesis);
         return thesis;

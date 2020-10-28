@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.poznan.put.thesisapi.entities.ApproveThesisDto;
+import pl.poznan.put.thesisapi.entities.ChooseStudentDto;
 import pl.poznan.put.thesisapi.entities.AssignStudentDto;
 import pl.poznan.put.thesisapi.entities.RevokeThesisDto;
 import pl.poznan.put.thesisapi.entities.UserEntity;
@@ -45,17 +45,17 @@ public class ThesisApiController {
     public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
         User user = this.getUserFromHeaders(headers);
         String result = this.thesisRepository.assignStudent(body.getThesisNumber(), body.getStudent(), body.getPriority(), user);
-        if(result.equals("error")) {
+        if(!result.equals("success")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(new Gson().toJson(result));
     }
 
-    @PostMapping("/approve")
-    public ResponseEntity approveThesis(@RequestBody() ApproveThesisDto body, @RequestHeader Map<String, String> headers) {
+    @PostMapping("/choose-student")
+    public ResponseEntity chooseStudent(@RequestBody() ChooseStudentDto body, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.approveThesis(body.getThesisNumber(), body.getStudent(), user);
-        if(result.equals("error")) {
+        String result = this.thesisRepository.chooseStudent(body.getThesisNumber(), body.getStudent(), user);
+        if(!result.equals("success")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(new Gson().toJson(result));
@@ -65,7 +65,7 @@ public class ThesisApiController {
     public ResponseEntity revokeThesis(@RequestBody() RevokeThesisDto body, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
         String result = this.thesisRepository.revokeThesis(body.getThesisNumber(), user);
-        if(result.equals("error")) {
+        if(!result.equals("success")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(new Gson().toJson(result));
