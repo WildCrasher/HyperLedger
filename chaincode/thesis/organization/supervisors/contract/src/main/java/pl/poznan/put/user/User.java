@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @DataType()
-public class User extends State {
+public final class User extends State {
 
     @Property()
     private String name;

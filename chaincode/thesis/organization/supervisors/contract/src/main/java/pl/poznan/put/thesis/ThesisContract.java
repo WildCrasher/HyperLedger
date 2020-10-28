@@ -75,7 +75,7 @@ public final class ThesisContract implements ContractInterface {
 
         String studentKey = State.makeKey(new String[] {student});
         User user = ctx.getUserList().getUser(studentKey);
-        if(user == null) {
+        if (user == null) {
             user = new User().setName(student).setKey();
         }
 
@@ -222,7 +222,7 @@ public final class ThesisContract implements ContractInterface {
         user.removeThesisId(thesisNumber);
 
         ctx.getUserList().updateUser(user);
-        
+
         return thesis;
     }
 

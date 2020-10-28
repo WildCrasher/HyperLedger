@@ -226,7 +226,7 @@ Orderer: &OrdererDefaults
           ServerTLSCert: ../organizations/ordererOrganizations/put.poznan.pl/orderers/orderer.put.poznan.pl/tls/server.crt
 
     # Batch Timeout: The amount of time to wait before creating a batch
-    BatchTimeout: 2s
+    BatchTimeout: 0.1s
 
     # Batch Size: Controls the number of messages batched into a block
     BatchSize:

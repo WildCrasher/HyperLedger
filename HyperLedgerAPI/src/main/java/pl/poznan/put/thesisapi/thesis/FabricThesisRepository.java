@@ -13,7 +13,8 @@ import java.util.concurrent.TimeoutException;
 public class FabricThesisRepository implements ThesisRepository {
     @Override
     public String save(final Thesis thesis, final User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -40,7 +41,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String assignStudent(String thesisNumber, String student, int priority, User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -66,7 +68,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String chooseStudent(String thesisNumber, String student, User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -91,7 +94,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String revokeThesis(String thesisNumber, User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -116,7 +120,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String getById(final String id, final User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -135,17 +140,17 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String getAll(final User user) {
-        try(Gateway gateway = this.getGateway(user)) {
-
+        try {
+            Gateway gateway = this.getGateway(user);
             Network network = gateway.getNetwork("mychannel");
 
             Contract contract = network.getContract("thesis");
 
             System.out.println("Evaluate query all thesis transaction.");
             byte[] response = contract.evaluateTransaction("queryAllThesis");
+            System.out.println("Response");
 
             return new String(response);
-
         } catch (GatewayException | IOException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -155,7 +160,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String acceptAssignment(String thesisNumber, User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 
@@ -180,7 +186,8 @@ public class FabricThesisRepository implements ThesisRepository {
 
     @Override
     public String declineAssignment(String thesisNumber, User user) {
-        try(Gateway gateway = this.getGateway(user)) {
+        try {
+            Gateway gateway = this.getGateway(user);
 
             Network network = gateway.getNetwork("mychannel");
 

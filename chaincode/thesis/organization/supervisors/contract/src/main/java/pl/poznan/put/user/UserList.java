@@ -2,10 +2,8 @@ package pl.poznan.put.user;
 
 import org.hyperledger.fabric.contract.Context;
 import pl.poznan.put.ledgerapi.StateList;
-import pl.poznan.put.thesis.Thesis;
-import pl.poznan.put.thesis.ThesisList;
 
-public class UserList {
+public final class UserList {
 
     private StateList stateList;
 
