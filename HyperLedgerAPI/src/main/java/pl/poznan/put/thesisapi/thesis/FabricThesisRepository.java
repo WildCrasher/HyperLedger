@@ -1,5 +1,6 @@
 package pl.poznan.put.thesisapi.thesis;
 
+import com.google.gson.Gson;
 import org.hyperledger.fabric.gateway.*;
 import org.springframework.stereotype.Repository;
 import pl.poznan.put.thesisapi.user.User;
@@ -219,13 +220,11 @@ public class FabricThesisRepository implements ThesisRepository {
 
             System.out.println("Evaluate query student theses transaction.");
             byte[] response = contract.evaluateTransaction("queryStudentTheses", user.getName());
-
             return new String(response);
         } catch (GatewayException | IOException e) {
             e.printStackTrace();
-            System.exit(-1);
+            return "error";
         }
-        return null;
     }
 
     private Gateway getGateway(final User user) throws IOException {

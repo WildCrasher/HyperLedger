@@ -547,6 +547,9 @@ public final class ThesisContractTest {
             when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 2, date));
+            studentAssignments.add(new StudentAssignment("Student2", 3, date));
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setFree()
@@ -554,21 +557,58 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent("Student")
+                    .setStudentsAssigned(studentAssignments)
                     .setKey();
 
             byte[] data = State.serialize(thesis);
 
             when(stub.getState("A001")).thenReturn(data);
 
+            ArrayList<StudentAssignment> studentAssignments2 = new ArrayList<>();
+            studentAssignments2.add(new StudentAssignment("Student", 2, date));
+            studentAssignments2.add(new StudentAssignment("Student2", 3, date));
+            Thesis otherThesis = new Thesis()
+                    .setThesisNumber("A002")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setStudentsAssigned(studentAssignments2)
+                    .setKey();
+
+            byte[] otherThesisData = State.serialize(otherThesis);
+
+            when(stub.getState("A002")).thenReturn(otherThesisData);
+
+            User user = new User().setName("Student").setKey().addThesisId("A001").addThesisId("A002");
+            byte[] userData = State.serialize(user);
+            when(stub.getState("Student")).thenReturn(userData);
+
+            User user2 = new User().setName("Student2").setKey().addThesisId("A001").addThesisId("A002");
+            byte[] userData2 = State.serialize(user2);
+            when(stub.getState("Student2")).thenReturn(userData2);
+
             try {
                 contract.acceptAssignment(ctx, "A001", "Student");
             } catch (ParseException ignored) { }
 
             thesis.setOwned();
-
+            thesis.removeStudentAssignment("Student2");
             byte[] data2 = State.serialize(thesis);
-
             verify(stub).putState("A001", data2);
+
+            otherThesis.removeStudentAssignment("Student");
+            byte[] otherThesisData2 = State.serialize(otherThesis);
+            verify(stub).putState("A002", otherThesisData2);
+
+            user.removeThesisId("A002");
+            userData = State.serialize(user);
+            verify(stub).putState("Student", userData);
+
+            user2.removeThesisId("A001");
+            userData2 = State.serialize(user2);
+            verify(stub).putState("Student2", userData2);
         }
 
         @Test

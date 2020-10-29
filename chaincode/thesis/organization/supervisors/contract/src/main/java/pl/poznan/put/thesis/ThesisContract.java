@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -154,6 +155,31 @@ public final class ThesisContract implements ContractInterface {
         }
 
         thesis.setOwned();
+
+        //remove user from every other thesis
+        User user = ctx.getUserList().getUser(username);
+        Thesis thesisIt = null;
+        for (Iterator<String> it = user.getThesesId().iterator(); it.hasNext(); ) {
+            String thesisId = it.next();
+            if (!thesisId.equals(thesisNumber)) {
+                thesisIt = ctx.getThesisList().getThesis(thesisId);
+                thesisIt.removeStudentAssignment(username);
+                ctx.getThesisList().updateThesis(thesisIt);
+                it.remove();
+            }
+        }
+        ctx.getUserList().updateUser(user);
+
+        //remove other users from assignments
+        for (Iterator<StudentAssignment> it = thesis.getStudentsAssigned().iterator(); it.hasNext(); ) {
+            StudentAssignment assignment = it.next();
+            if (!assignment.getStudentName().equals(username)) {
+                user = ctx.getUserList().getUser(assignment.getStudentName());
+                user.removeThesisId(thesisNumber);
+                ctx.getUserList().updateUser(user);
+                it.remove();
+            }
+        }
 
         ctx.getThesisList().updateThesis(thesis);
 
