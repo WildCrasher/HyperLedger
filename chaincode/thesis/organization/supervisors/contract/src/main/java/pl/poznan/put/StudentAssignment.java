@@ -5,6 +5,7 @@ public final class StudentAssignment {
     private String studentName;
     private int priority;
     private String date;
+    private int thesisAssigned;
 
     public StudentAssignment() {
 
@@ -51,10 +52,19 @@ public final class StudentAssignment {
         StudentAssignment studentAssignment = (StudentAssignment) o;
         return this.getStudentName().equals(studentAssignment.getStudentName())
                 && this.getPriority() == studentAssignment.getPriority()
-                && this.getDate().equals(studentAssignment.getDate());
+                && this.getDate().equals(studentAssignment.getDate())
+                && this.getThesisAssigned() == studentAssignment.getThesisAssigned();
     }
 
     public int hashCode() {
         return 0;
+    }
+
+    public int getThesisAssigned() {
+        return thesisAssigned;
+    }
+
+    public void setThesisAssigned(final int newThesisAssigned) {
+        this.thesisAssigned = newThesisAssigned;
     }
 }

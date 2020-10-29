@@ -100,6 +100,14 @@ public final class ThesisContractTest {
             when(stub.getState("A001")).thenReturn(data);
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
+            thesis.getStudentsAssigned().get(0).setThesisAssigned(1);
+
+            User user = new User().setName("Student").setKey();
+            user.addThesisId("A001");
+
+            byte[] userData = State.serialize(user);
+            when(stub.getState("Student")).thenReturn(userData);
+
             assertEquals(contract.queryThesis(ctx, "A001"), thesis);
         }
 

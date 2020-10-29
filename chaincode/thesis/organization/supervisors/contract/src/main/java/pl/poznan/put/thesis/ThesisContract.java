@@ -230,8 +230,15 @@ public final class ThesisContract implements ContractInterface {
     public Thesis queryThesis(final ThesisContext ctx, final String thesisNumber) {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
+
         if (thesis == null) {
             throw new RuntimeException("Thesis " + thesisNumber + " not found");
+        }
+
+        User user = null;
+        for (StudentAssignment assignment : thesis.getStudentsAssigned()) {
+            user = ctx.getUserList().getUser(assignment.getStudentName());
+            assignment.setThesisAssigned(user.getThesesId().size());
         }
 
         return thesis;
