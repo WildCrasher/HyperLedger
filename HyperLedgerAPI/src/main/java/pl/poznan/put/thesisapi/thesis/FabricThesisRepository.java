@@ -218,7 +218,7 @@ public class FabricThesisRepository implements ThesisRepository {
             Contract contract = network.getContract("thesis");
 
             System.out.println("Evaluate query student theses transaction.");
-            byte[] response = contract.evaluateTransaction("queryStudentTheses");
+            byte[] response = contract.evaluateTransaction("queryStudentTheses", user.getName());
 
             return new String(response);
         } catch (GatewayException | IOException e) {
