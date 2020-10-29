@@ -799,6 +799,5 @@ public final class ThesisContractTest {
 
             assertEquals("User Student is not assigned to thesis A001", ex.getMessage());
         }
-
     }
 }

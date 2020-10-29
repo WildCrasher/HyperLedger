@@ -255,12 +255,25 @@ public final class ThesisContract implements ContractInterface {
         return new Gson().toJson(thesis);
     }
 
-    private Boolean isUserInOrg(final Context ctx, final String org) {
-        String userMSPID = ctx.getClientIdentity().getMSPID().toLowerCase();
-        if (userMSPID.contains(org)) {
-            return true;
+    @Transaction()
+    public String queryStudentTheses(final ThesisContext ctx, final String student) {
+        User user = ctx.getUserList().getUser(student);
+
+        if (user == null) {
+            return new Gson().toJson(new ArrayList<>());
         }
 
-        return false;
+        ArrayList<Thesis> results = new ArrayList<>();
+
+        for (String thesisId : user.getThesesId()) {
+            results.add(ctx.getThesisList().getThesis(thesisId));
+        }
+
+        return new Gson().toJson(results);
+    }
+
+    private Boolean isUserInOrg(final Context ctx, final String org) {
+        String userMSPID = ctx.getClientIdentity().getMSPID().toLowerCase();
+        return userMSPID.contains(org);
     }
 }

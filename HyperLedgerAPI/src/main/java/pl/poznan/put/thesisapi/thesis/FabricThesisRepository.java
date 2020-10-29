@@ -148,7 +148,6 @@ public class FabricThesisRepository implements ThesisRepository {
 
             System.out.println("Evaluate query all thesis transaction.");
             byte[] response = contract.evaluateTransaction("queryAllThesis");
-            System.out.println("Response");
 
             return new String(response);
         } catch (GatewayException | IOException e) {
@@ -208,6 +207,25 @@ public class FabricThesisRepository implements ThesisRepository {
             return "error";
         }
         return "success";
+    }
+
+    @Override
+    public String getStudentTheses(User user) {
+        try {
+            Gateway gateway = this.getGateway(user);
+            Network network = gateway.getNetwork("mychannel");
+
+            Contract contract = network.getContract("thesis");
+
+            System.out.println("Evaluate query student theses transaction.");
+            byte[] response = contract.evaluateTransaction("queryStudentTheses");
+
+            return new String(response);
+        } catch (GatewayException | IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return null;
     }
 
     private Gateway getGateway(final User user) throws IOException {

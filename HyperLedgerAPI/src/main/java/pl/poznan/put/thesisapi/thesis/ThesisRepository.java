@@ -13,6 +13,7 @@ public interface ThesisRepository {
     String revokeThesis(final String thesisNumber, final User user);
     String getById(final String id, final User user);
     String getAll(final User user);
+    String getStudentTheses(final User user);
     String acceptAssignment(final String thesisNumber, final User user);
     String declineAssignment(final String thesisNumber, final User user);
 

@@ -100,7 +100,13 @@ public class ThesisApiController {
     public String getAllThesis(@RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
         String result = this.thesisRepository.getAll(user);
-        System.out.println("Response in controller");
+        return gson.toJson(result);
+    }
+
+    @GetMapping(value = "/thesis-assignments", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getStudentTheses(@RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
+        String result = this.thesisRepository.getStudentTheses(user);
         return gson.toJson(result);
     }
 
