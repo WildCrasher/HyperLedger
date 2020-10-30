@@ -159,7 +159,7 @@ public final class ThesisContract implements ContractInterface {
         //remove user from every other thesis
         User user = ctx.getUserList().getUser(username);
         Thesis thesisIt = null;
-        for (Iterator<String> it = user.getThesesId().iterator(); it.hasNext(); ) {
+        for (Iterator<String> it = user.getThesesId().iterator(); it.hasNext();) {
             String thesisId = it.next();
             if (!thesisId.equals(thesisNumber)) {
                 thesisIt = ctx.getThesisList().getThesis(thesisId);
@@ -171,7 +171,7 @@ public final class ThesisContract implements ContractInterface {
         ctx.getUserList().updateUser(user);
 
         //remove other users from assignments
-        for (Iterator<StudentAssignment> it = thesis.getStudentsAssigned().iterator(); it.hasNext(); ) {
+        for (Iterator<StudentAssignment> it = thesis.getStudentsAssigned().iterator(); it.hasNext();) {
             StudentAssignment assignment = it.next();
             if (!assignment.getStudentName().equals(username)) {
                 user = ctx.getUserList().getUser(assignment.getStudentName());
