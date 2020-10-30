@@ -276,12 +276,14 @@ public final class ThesisContract implements ContractInterface {
     @Transaction()
     public String queryAllThesis(final ThesisContext ctx) {
 
-        ArrayList<Thesis> thesis = ctx.getThesisList().getAllThesis();
-        if (thesis == null) {
+        ArrayList<Thesis> theses = ctx.getThesisList().getAllThesis();
+        if (theses == null) {
             throw new RuntimeException("No thesis found");
         }
 
-        return new Gson().toJson(thesis);
+        theses.removeIf(thesis -> !thesis.isFree() && !thesis.isOwned());
+
+        return new Gson().toJson(theses);
     }
 
     @Transaction()
