@@ -573,7 +573,7 @@ public final class ThesisContractTest {
                     .setSupervisor("Promotor")
                     .setIssueDateTime(date)
                     .setTopic("Temat")
-                    .setStudent(" ")
+                    .setStudent("Student")
                     .setStudentsAssigned(studentAssignments2)
                     .setKey();
 
@@ -599,6 +599,7 @@ public final class ThesisContractTest {
             verify(stub).putState("A001", data2);
 
             otherThesis.removeStudentAssignment("Student");
+            otherThesis.setStudent(" ");
             byte[] otherThesisData2 = State.serialize(otherThesis);
             verify(stub).putState("A002", otherThesisData2);
 

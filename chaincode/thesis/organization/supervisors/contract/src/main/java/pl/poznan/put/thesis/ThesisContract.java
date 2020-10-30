@@ -164,6 +164,9 @@ public final class ThesisContract implements ContractInterface {
             if (!thesisId.equals(thesisNumber)) {
                 thesisIt = ctx.getThesisList().getThesis(thesisId);
                 thesisIt.removeStudentAssignment(username);
+                if (thesisIt.isFree() && thesisIt.getStudent().equals(username)) {
+                   thesisIt.setStudent(" ");
+                }
                 ctx.getThesisList().updateThesis(thesisIt);
                 it.remove();
             }
