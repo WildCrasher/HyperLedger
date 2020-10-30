@@ -18,10 +18,10 @@ import java.util.Set;
 public class SupervisorsAdmin implements User {
 
     private Wallet wallet = Wallets.newFileSystemWallet(Paths.get("wallet"));
-    private X509Identity identity = (X509Identity)wallet.get("admin@supervisors.put.poznan.pl");
+    private X509Identity identity = (X509Identity)wallet.get("Admin@supervisors.put.poznan.pl");
 
     public SupervisorsAdmin() throws IOException {
-        if (wallet.get("admin@supervisors.put.poznan.pl") == null) {
+        if (wallet.get("Admin@supervisors.put.poznan.pl") == null) {
             this.enroll();
         }
     }
