@@ -184,7 +184,7 @@ public final class ThesisContractTest {
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
-                    .setFree()
+                    .setOwned()
                     .setSupervisor("Promotor")
                     .setIssueDateTime(date)
                     .setTopic("Temat")
