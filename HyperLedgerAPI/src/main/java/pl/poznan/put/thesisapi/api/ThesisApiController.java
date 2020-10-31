@@ -41,9 +41,9 @@ public class ThesisApiController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteThesis(@RequestBody() DeleteThesisDto body, @RequestHeader Map<String, String> headers) {
+    public String deleteThesis(@PathVariable(value = "id") String id, @RequestHeader Map<String, String> headers) {
         User user = this.getUserFromHeaders(headers);
-        String result = this.thesisRepository.delete(body.getThesisNumber(), user);
+        String result = this.thesisRepository.delete(id, user);
         return gson.toJson(result);
     }
 
