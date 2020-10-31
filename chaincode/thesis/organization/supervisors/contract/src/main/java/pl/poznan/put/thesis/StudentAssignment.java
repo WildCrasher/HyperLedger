@@ -1,4 +1,4 @@
-package pl.poznan.put;
+package pl.poznan.put.thesis;
 
 public final class StudentAssignment {
 

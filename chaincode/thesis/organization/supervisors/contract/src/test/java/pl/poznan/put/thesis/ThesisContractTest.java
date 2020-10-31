@@ -6,7 +6,6 @@ import org.hyperledger.fabric.shim.ChaincodeStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import pl.poznan.put.StudentAssignment;
 import pl.poznan.put.ledgerapi.State;
 import pl.poznan.put.user.User;
 import pl.poznan.put.user.UserList;
