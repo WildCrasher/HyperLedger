@@ -11,6 +11,7 @@ import pl.poznan.put.thesisapi.thesis.ThesisRepository;
 import pl.poznan.put.thesisapi.user.User;
 import pl.poznan.put.thesisapi.user.UserService;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import static pl.poznan.put.thesisapi.security.SecurityConstants.*;
@@ -42,6 +43,7 @@ public class ThesisApiController {
 
     @GetMapping("delete/{id}")
     public String deleteThesis(@PathVariable(value = "id") String id, @RequestHeader Map<String, String> headers) {
+        System.out.println(id);
         User user = this.getUserFromHeaders(headers);
         String result = this.thesisRepository.delete(id, user);
         return gson.toJson(result);

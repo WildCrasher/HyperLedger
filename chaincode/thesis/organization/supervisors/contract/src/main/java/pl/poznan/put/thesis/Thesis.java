@@ -76,6 +76,9 @@ public final class Thesis extends State {
     private String assignmentDate;
 
     @Property()
+    private String description = "";
+
+    @Property()
     private ArrayList<StudentAssignment> studentsAssigned = new ArrayList<>();
 
     public String getStudent() {
@@ -162,10 +165,10 @@ public final class Thesis extends State {
      */
     public static Thesis createInstance(final String supervisor, final String thesisNumber, final String issueDateTime,
                                         final String student, final String state, final String topic,
-                                        final ArrayList<StudentAssignment> studentsAssigned) {
+                                        final ArrayList<StudentAssignment> studentsAssigned, final String description) {
         return new Thesis().setSupervisor(supervisor).setThesisNumber(thesisNumber).setKey()
                 .setIssueDateTime(issueDateTime).setStudent(student).setState(state).setTopic(topic)
-                .setStudentsAssigned(studentsAssigned);
+                .setStudentsAssigned(studentsAssigned).setDescription(description);
     }
 
     public boolean equals(final Object o) {
@@ -185,7 +188,8 @@ public final class Thesis extends State {
                 && this.getTopic().equals(thesis.getTopic())
                 && this.getKey().equals(thesis.getKey())
                 && this.getStudentsAssigned().equals(thesis.getStudentsAssigned())
-                && this.getAssignmentDate().equals(thesis.getAssignmentDate());
+                && this.getAssignmentDate().equals(thesis.getAssignmentDate())
+                && this.getDescription().equals(thesis.getDescription());
     }
 
     public int hashCode() {
@@ -229,5 +233,14 @@ public final class Thesis extends State {
         long diff = today.getTime() - formattedAssignmentDate.getTime();
 
         return timeUnit.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Thesis setDescription(final String newDescription) {
+        this.description = newDescription;
+        return this;
     }
 }

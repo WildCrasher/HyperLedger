@@ -53,11 +53,12 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent(" ")
+                    .setDescription("Opis")
                     .setKey();
 
             byte[] data = State.serialize(thesis);
 
-            contract.issue(ctx, "Promotor", "A001", date, "Temat");
+            contract.issue(ctx, "Promotor", "A001", date, "Temat", "Opis");
 
             verify(stub).putState("A001", data);
         }
@@ -70,7 +71,7 @@ public final class ThesisContractTest {
 
             ChaincodeException ex = assertThrows(
                     ChaincodeException.class,
-                    () -> contract.issue(ctx, "Promotor", "A001", date, "Temat")
+                    () -> contract.issue(ctx, "Promotor", "A001", date, "Temat", "Opis")
             );
 
             assertEquals("cannotPerformAction", ex.getMessage());
@@ -197,6 +198,7 @@ public final class ThesisContractTest {
                     .setIssueDateTime(date)
                     .setTopic("Temat")
                     .setStudent(" ")
+                    .setDescription("Opis")
                     .setKey()
                     .setStudentsAssigned(studentAssignments);
 

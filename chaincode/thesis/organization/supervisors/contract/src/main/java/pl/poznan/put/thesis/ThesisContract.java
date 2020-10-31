@@ -48,7 +48,7 @@ public final class ThesisContract implements ContractInterface {
 
     @Transaction()
     public Thesis issue(final ThesisContext ctx, final String supervisor, final String thesisNumber,
-                        final String issueDateTime, final String topic) {
+                        final String issueDateTime, final String topic, final String description) {
 
         if (!isUserInOrg(ctx, "supervisor")) {
             throw new ChaincodeException("cannotPerformAction");
@@ -56,7 +56,7 @@ public final class ThesisContract implements ContractInterface {
 
         ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
         Thesis thesis = Thesis.createInstance(supervisor, thesisNumber, issueDateTime, " ", Thesis.FREE, topic,
-                studentAssignments);
+                studentAssignments, description);
 
         ctx.getThesisList().addThesis(thesis);
 

@@ -26,7 +26,8 @@ public class FabricThesisRepository implements ThesisRepository {
                     user.getName(),
                     thesis.getThesisNumber(),
                     thesis.getIssueDateTime(),
-                    thesis.getTopic()
+                    thesis.getTopic(),
+                    thesis.getDescription()
             );
 
             System.out.println(response);
