@@ -131,9 +131,8 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
-    public Thesis chooseStudent(final ThesisContext ctx, final String thesisNumber, final String student)
-            throws ParseException {
-
+    public Thesis chooseStudent(final ThesisContext ctx, final String supervisor, final String thesisNumber,
+                                final String student) {
         if (!isUserInOrg(ctx, "supervisor")) {
             throw new ChaincodeException("cannotPerformAction");
         }
@@ -141,16 +140,16 @@ public final class ThesisContract implements ContractInterface {
         String thesisKey = State.makeKey(new String[] {thesisNumber});
         Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
 
+        if (!thesis.getSupervisor().equals(supervisor)) {
+            throw new RuntimeException("User " + supervisor + " is not a supervisor of thesis " + thesisNumber);
+        }
+
         if (!thesis.isStudentInAssignments(student)) {
             throw new RuntimeException("Student " + student + " is not assigned to thesis " + thesisNumber);
         }
 
         if (thesis.isOwned()) {
             throw new RuntimeException("Thesis " + thesisNumber + " is already approved");
-        }
-
-        if (!thesis.getStudent().equals(" ") && thesis.getAssignmentDateDiff(TimeUnit.DAYS) < 14) {
-            throw new RuntimeException("Thesis " + thesisNumber + " is already assigned");
         }
 
         thesis.setStudent(student);

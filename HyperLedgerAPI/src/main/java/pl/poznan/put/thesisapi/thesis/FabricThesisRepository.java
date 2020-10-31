@@ -104,6 +104,7 @@ public class FabricThesisRepository implements ThesisRepository {
 
             byte[] response = contract.submitTransaction(
                     "chooseStudent",
+                    user.getName(),
                     thesisNumber,
                     student
             );
