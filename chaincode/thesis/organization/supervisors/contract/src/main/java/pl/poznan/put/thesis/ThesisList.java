@@ -32,4 +32,9 @@ public final class ThesisList {
         this.stateList.updateState(thesis);
         return this;
     }
+
+    public ThesisList deleteThesis(final String thesisKey) {
+        this.stateList.deleteState(thesisKey);
+        return this;
+    }
 }

@@ -40,6 +40,13 @@ public class ThesisApiController {
         return gson.toJson(result);
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteThesis(@RequestBody() DeleteThesisDto body, @RequestHeader Map<String, String> headers) {
+        User user = this.getUserFromHeaders(headers);
+        String result = this.thesisRepository.delete(body.getThesisNumber(), user);
+        return gson.toJson(result);
+    }
+
     @PostMapping("/assign")
     public ResponseEntity assignStudent(@RequestBody() AssignStudentDto body, @RequestHeader Map<String, String> headers) throws Exception {
         User user = this.getUserFromHeaders(headers);

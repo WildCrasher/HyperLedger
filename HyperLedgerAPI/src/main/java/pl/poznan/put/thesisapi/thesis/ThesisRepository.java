@@ -8,6 +8,7 @@ import pl.poznan.put.thesisapi.user.User;
 public interface ThesisRepository {
 
     String save(final Thesis thesis, final User user);
+    String delete(final String thesisNumber, final User user);
     String assignStudent(final String thesisNumber, final String student, final int priority, final User user);
     String chooseStudent(final String thesisNumber, final String student, final User user);
     String revokeThesis(final String thesisNumber, final User user);

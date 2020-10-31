@@ -41,6 +41,32 @@ public class FabricThesisRepository implements ThesisRepository {
     }
 
     @Override
+    public String delete(String thesisNumber, User user) {
+        try {
+            Gateway gateway = this.getGateway(user);
+
+            Network network = gateway.getNetwork("mychannel");
+
+            Contract contract = network.getContract("thesis");
+
+            byte[] response = contract.submitTransaction(
+                    "removeThesis",
+                    user.getName(),
+                    thesisNumber
+            );
+
+            System.out.println(response);
+        } catch (RuntimeException | GatewayException | IOException | TimeoutException | InterruptedException e) {
+            if(e.getMessage().contains("cannotPerformAction")) {
+                return "cannotPerformAction";
+            }
+            e.printStackTrace();
+            return "error";
+        }
+        return "success";
+    }
+
+    @Override
     public String assignStudent(String thesisNumber, String student, int priority, User user) {
         try {
             Gateway gateway = this.getGateway(user);

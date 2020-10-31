@@ -100,4 +100,12 @@ public class StateListImpl implements StateList {
         return this;
     }
 
+    /**
+     * Delete a state in the list.
+     */
+    @Override
+    public StateList deleteState(final String key) {
+        this.ctx.getStub().delState(key);
+        return this;
+    }
 }

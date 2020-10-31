@@ -26,16 +26,12 @@ public interface StateList {
     }
 
     /**
-     * Add a state to the list. Creates a new state in worldstate with appropriate
-     * composite key. Note that state defines its own key. State object is
-     * serialized before writing.
+     * Add a state to the list.
      */
     StateList addState(State state);
 
     /**
-     * Get a state from the list using supplied keys. Form composite keys to
-     * retrieve state from world state. State data is deserialized into JSON object
-     * before being returned.
+     * Get a state from the list using supplied keys.
      */
     State getState(String key);
 
@@ -47,11 +43,13 @@ public interface StateList {
     ArrayList<State> getAllStates();
 
     /**
-     * Update a state in the list. Puts the new state in world state with
-     * appropriate composite key. Note that state defines its own key. A state is
-     * serialized before writing. Logic is very similar to addState() but kept
-     * separate becuase it is semantically distinct.
+     * Update a state in the list.
      */
     StateList updateState(State state);
+
+    /**
+     * Delete a state in the list.
+     */
+    StateList deleteState(String key);
 
 }

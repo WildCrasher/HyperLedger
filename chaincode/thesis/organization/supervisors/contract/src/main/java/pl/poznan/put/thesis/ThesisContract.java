@@ -64,6 +64,33 @@ public final class ThesisContract implements ContractInterface {
     }
 
     @Transaction()
+    public Thesis removeThesis(final ThesisContext ctx, final String supervisor, final String thesisNumber) {
+
+        if (!isUserInOrg(ctx, "supervisor")) {
+            throw new ChaincodeException("cannotPerformAction");
+        }
+
+        String thesisKey = State.makeKey(new String[] {thesisNumber});
+        Thesis thesis = ctx.getThesisList().getThesis(thesisKey);
+
+        if (thesis == null) {
+            throw new RuntimeException("Thesis " + thesisNumber + " not found");
+        }
+
+        if (thesis.getStudentsAssigned().size() > 0 || !thesis.getStudent().equals(" ") || thesis.isOwned()) {
+            throw new RuntimeException("Cannot remove thesis with students assigned");
+        }
+
+        if (!thesis.getSupervisor().equals(supervisor)) {
+            throw new RuntimeException("User " + supervisor + " is not a supervisor of thesis " + thesisNumber);
+        }
+
+        ctx.getThesisList().deleteThesis(thesisKey);
+
+        return thesis;
+    }
+
+    @Transaction()
     public Thesis assignStudent(final ThesisContext ctx, final String thesisNumber, final String student,
                                 final int priority) {
 

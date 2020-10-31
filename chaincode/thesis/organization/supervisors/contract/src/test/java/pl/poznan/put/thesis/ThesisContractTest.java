@@ -79,6 +79,111 @@ public final class ThesisContractTest {
     }
 
     @Nested
+    class RemoveThesis {
+        @Test
+        public void remove() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            contract.removeThesis(ctx, "Promotor", "A001");
+
+            verify(stub).delState("A001");
+        }
+
+        @Test
+        public void studentCantRemove() {
+            when(clientIdentity.getMSPID()).thenReturn("studentsMSP");
+
+            ChaincodeException ex = assertThrows(
+                    ChaincodeException.class,
+                    () -> contract.removeThesis(ctx, "Promotor", "A001")
+            );
+
+            assertEquals("cannotPerformAction", ex.getMessage());
+        }
+
+        @Test
+        public void thesisNotFound() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.removeThesis(ctx, "Promotor", "A001")
+            );
+
+            assertEquals("Thesis A001 not found", ex.getMessage());
+        }
+
+        @Test
+        public void cantRemoveWithStudents() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            ArrayList<StudentAssignment> studentAssignments = new ArrayList<>();
+            studentAssignments.add(new StudentAssignment("Student", 3, date));
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setKey()
+                    .setStudentsAssigned(studentAssignments);
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.removeThesis(ctx, "Promotor", "A001")
+            );
+
+            assertEquals("Cannot remove thesis with students assigned", ex.getMessage());
+        }
+
+        @Test
+        public void isNotSupervisorOfThesis() {
+            when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+            Thesis thesis = new Thesis()
+                    .setThesisNumber("A001")
+                    .setFree()
+                    .setSupervisor("Promotor2")
+                    .setIssueDateTime(date)
+                    .setTopic("Temat")
+                    .setStudent(" ")
+                    .setKey();
+
+            byte[] data = State.serialize(thesis);
+
+            when(stub.getState("A001")).thenReturn(data);
+
+            RuntimeException ex = assertThrows(
+                    RuntimeException.class,
+                    () -> contract.removeThesis(ctx, "Promotor", "A001")
+            );
+
+            assertEquals("User Promotor is not a supervisor of thesis A001", ex.getMessage());
+        }
+    }
+
+    @Nested
     class Query {
         @Test
         public void getThesis() {
