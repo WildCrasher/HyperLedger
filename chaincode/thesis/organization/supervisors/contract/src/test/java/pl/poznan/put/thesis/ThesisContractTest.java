@@ -399,9 +399,7 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
-            try {
-                contract.chooseStudent(ctx, "A001", "Student");
-            } catch (ParseException ignored) { }
+            contract.chooseStudent(ctx, "Promotor", "A001", "Student");
 
             thesis.setStudent("Student");
 
@@ -432,9 +430,7 @@ public final class ThesisContractTest {
 
             when(stub.getState("A001")).thenReturn(data);
 
-            try {
-                contract.chooseStudent(ctx, "A001", "Student");
-            } catch (ParseException ignored) { }
+            contract.chooseStudent(ctx, "Promotor", "A001", "Student");
 
             thesis.setStudent("Student");
 
@@ -449,7 +445,7 @@ public final class ThesisContractTest {
 
             ChaincodeException ex = assertThrows(
                     ChaincodeException.class,
-                    () -> contract.chooseStudent(ctx, "A001", "Student")
+                    () -> contract.chooseStudent(ctx, "Promotor", "A001", "Student")
             );
 
             assertEquals("cannotPerformAction", ex.getMessage());
@@ -475,7 +471,7 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.chooseStudent(ctx, "A001", "Student")
+                    () -> contract.chooseStudent(ctx, "Promotor", "A001", "Student")
             );
 
             assertEquals("Student Student is not assigned to thesis A001", ex.getMessage());
@@ -504,14 +500,14 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.chooseStudent(ctx, "A001", "Student1")
+                    () -> contract.chooseStudent(ctx, "Promotor", "A001", "Student1")
             );
 
             assertEquals("Thesis A001 is already approved", ex.getMessage());
         }
 
         @Test
-        public void alreadyAssigned() {
+        public void isNotSupervisorOfThesis() {
             when(clientIdentity.getMSPID()).thenReturn("supervisorsMSP");
 
             String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
@@ -520,10 +516,10 @@ public final class ThesisContractTest {
             Thesis thesis = new Thesis()
                     .setThesisNumber("A001")
                     .setFree()
-                    .setSupervisor("Promotor")
+                    .setSupervisor("Promotor2")
                     .setIssueDateTime(date)
                     .setTopic("Temat")
-                    .setStudent("Student2")
+                    .setStudent(" ")
                     .setKey()
                     .setStudentsAssigned(studentAssignments);
 
@@ -533,10 +529,10 @@ public final class ThesisContractTest {
 
             RuntimeException ex = assertThrows(
                     RuntimeException.class,
-                    () -> contract.chooseStudent(ctx, "A001", "Student")
+                    () -> contract.chooseStudent(ctx, "Promotor", "A001", "Student")
             );
 
-            assertEquals("Thesis A001 is already assigned", ex.getMessage());
+            assertEquals("User Promotor is not a supervisor of thesis A001", ex.getMessage());
         }
     }
 
