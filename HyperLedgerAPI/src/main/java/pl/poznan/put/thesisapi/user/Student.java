@@ -57,7 +57,7 @@ public class Student implements User {
             registrationRequest.setEnrollmentID(this.name);
             String enrollmentSecret = caClient.register(registrationRequest, admin);
             Enrollment enrollment = caClient.enroll(this.name, enrollmentSecret);
-            Identity user = Identities.newX509Identity("StudentsMSP", admin.getCert(), admin.getKey());
+            Identity user = Identities.newX509Identity("StudentsMSP", enrollment);
             wallet.put(this.getFullName(), user);
             System.out.println("Successfully enrolled user " + this.name + " and imported it into the wallet");
 

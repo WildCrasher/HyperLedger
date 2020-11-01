@@ -58,7 +58,7 @@ public class Supervisor implements User {
             registrationRequest.setEnrollmentID(this.name);
             String enrollmentSecret = caClient.register(registrationRequest, admin);
             Enrollment enrollment = caClient.enroll(this.name, enrollmentSecret);
-            Identity user = Identities.newX509Identity("SupervisorsMSP", admin.getCert(), admin.getKey());
+            Identity user = Identities.newX509Identity("SupervisorsMSP", enrollment);
             wallet.put(this.getFullName(), user);
             System.out.println("Successfully enrolled user " + this.name + " and imported it into the wallet");
 
